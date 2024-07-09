@@ -1,3 +1,11 @@
+:root {
+	--border-radius: 8px;
+	--background-color: #e0e0e0;
+	--field-background-color: #eeeeee;
+	--field-tile-background-color: #ffffff;
+	--shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+}
+
 * {
 	box-sizing: border-box;
 	padding: 0;
@@ -5,10 +13,25 @@
 }
 
 body {
-	background: white;
+	background: var(--background-color);
 	width: 100dvw;
 	height: 100dvh;
 	display: flex;
 	align-items: center;
 	justify-content: center;
+}
+
+.field {
+	position: relative;
+	padding: 16px;
+	display: grid;
+	gap: 16px;
+	background: var(--field-background-color);
+	border-radius: var(--border-radius);
+	box-shadow: var(--shadow);
+}
+
+.fieldTileBackground {
+	background: var(--field-tile-background-color);
+	border-radius: var(--border-radius);
 }

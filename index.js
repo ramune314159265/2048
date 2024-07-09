@@ -24,15 +24,15 @@ const run = () => {
 			this.data = [...Array(fieldHeight)].map(() => Array(fieldWidth).fill(0))
 		}
 		isTileFilled(x, y) {
-			return this.getTileId(x, y) !== 0
+			return this.#getTileId(x, y) !== 0
 		}
-		getTileId(x, y) {
+		#getTileId(x, y) {
 			if (x < 0 || fieldWidth <= x || y < 0 || fieldHeight <= y) {
 				return -1
 			}
 			return this.data[y][x]
 		}
-		setTileId(x, y, id) {
+		#setTileId(x, y, id) {
 			if (x < 0 || fieldWidth <= x || y < 0 || fieldHeight <= y) {
 				return
 			}
@@ -76,17 +76,40 @@ const run = () => {
 		}
 	}
 
-	class GameOutput {
-		constructor() {
-
+	class GameOutput extends EventRegister{
+		constructor(game) {
+			super()
+			this.game = game
+			this.element = document.createElement('div')
+			this.game.field.data.forEach(line=>{
+				line.forEach(()=>{
+					const tile = document.createElement('div')
+					tile.classList.add('fieldTileBackground')
+					this.element.append(tile)
+				})
+			})
+			this.element.classList.add('field')
+			this.element.style.gridTemplateColumns = `repeat(${fieldWidth}, 80px)`
+			this.element.style.gridTemplateRows = `repeat(${fieldHeight}, 80px)`
+			document.body.append(this.element)
 		}
 	}
 
 	class Game {
 		constructor(input) {
-			this.input = input
-			this.output = new GameOutput()
 			this.field = new Field(this)
+			this.input = input
+			this.output = new GameOutput(this)
 		}
 	}
+
+	const keyInput = new KeyboardInput()
+	const gameMain = new Game(keyInput)
+
+	document.body.addEventListener('click', () => {
+		gameMain.output.emit('data', gameMain)
+		console.log(gameMain)
+	})
 }
+
+run()
