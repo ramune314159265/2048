@@ -35,3 +35,19 @@ body {
 	background: var(--field-tile-background-color);
 	border-radius: var(--border-radius);
 }
+
+.fieldTile {
+	position: absolute;
+	top: 16px;
+	left: 16px;
+	width: 80px;
+	height: 80px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: var(--border-radius);
+	font-size: 2rem;
+	color: white;
+	background: black;
+	transition: all 0.2s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
