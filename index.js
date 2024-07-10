@@ -38,6 +38,13 @@ const run = () => {
 			}
 			this.data[y][x] = id
 		}
+		addTile(x, y, state) {
+			if (this.isTileFilled(x, y)) {
+				return
+			}
+			this.#setTileId(x, y, state)
+			this.game.output.addTile(x, y, state)
+		}
 	}
 
 	class GameInput extends EventRegister {
@@ -138,7 +145,7 @@ const run = () => {
 				duration: 200
 			})
 		}
-		async removeTile(x,y){
+		async removeTile(x, y) {
 			const element = this.element.querySelector(`[data-x="${x}"][data-y="${y}"]`)
 			if (!element) {
 				return
