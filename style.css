@@ -49,5 +49,4 @@ body {
 	font-size: 2rem;
 	color: white;
 	background: black;
-	transition: all 0.2s cubic-bezier(0.22, 0.61, 0.36, 1);
 }

@@ -2,6 +2,9 @@ const run = () => {
 	const fieldWidth = 4
 	const fieldHeight = 4
 
+	const animationDuration = 200
+	const animationEasing = 'cubic-bezier(0.22, 0.61, 0.36, 1)'
+
 	class EventRegister {
 		#events = {}
 
@@ -116,8 +119,8 @@ const run = () => {
 				{ scale: 0 },
 				{ scale: 1 }
 			], {
-				easing: 'cubic-bezier(0.22, 0.61, 0.36, 1)',
-				duration: 200
+				easing: animationEasing,
+				duration: animationDuration
 			}).finished
 		}
 		async moveTile(x, y, toX, toY) {
@@ -132,8 +135,8 @@ const run = () => {
 				{ translate: `${x * (80 + 16)}px ${y * (80 + 16)}px` },
 				{ translate: `${toX * (80 + 16)}px ${toY * (80 + 16)}px` }
 			], {
-				easing: 'cubic-bezier(0.22, 0.61, 0.36, 1)',
-				duration: 200
+				easing: animationEasing,
+				duration: animationDuration
 			}).finished
 		}
 		async updateTile(x, y, state) {
@@ -148,8 +151,8 @@ const run = () => {
 				{ scale: 1.1 },
 				{ scale: 1 }
 			], {
-				easing: 'cubic-bezier(0.22, 0.61, 0.36, 1)',
-				duration: 200
+				easing: animationEasing,
+				duration: animationDuration
 			}).finished
 		}
 		async removeTile(x, y) {
@@ -163,8 +166,8 @@ const run = () => {
 				{ scale: 1 },
 				{ scale: 0 }
 			], {
-				easing: 'cubic-bezier(0.22, 0.61, 0.36, 1)',
-				duration: 200
+				easing: animationEasing,
+				duration: animationDuration
 			}).finished
 			element.remove()
 		}
