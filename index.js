@@ -27,15 +27,15 @@ const run = () => {
 			this.data = [...Array(fieldHeight)].map(() => Array(fieldWidth).fill(0))
 		}
 		isTileFilled(x, y) {
-			return this.#getTileId(x, y) !== 0
+			return this.#getTileState(x, y) !== 0
 		}
-		#getTileId(x, y) {
+		#getTileState(x, y) {
 			if (x < 0 || fieldWidth <= x || y < 0 || fieldHeight <= y) {
 				return -1
 			}
 			return this.data[y][x]
 		}
-		#setTileId(x, y, id) {
+		#setTileState(x, y, id) {
 			if (x < 0 || fieldWidth <= x || y < 0 || fieldHeight <= y) {
 				return
 			}
@@ -45,15 +45,15 @@ const run = () => {
 			if (this.isTileFilled(x, y)) {
 				return
 			}
-			this.#setTileId(x, y, state)
+			this.#setTileState(x, y, state)
 			this.game.output.addTile(x, y, state)
 		}
 		moveTile(x, y, toX, toY) {
 			if (!this.isTileFilled(x, y) && this.isTileFilled(toX, toY)) {
 				return
 			}
-			this.#setTileId(toX, toY, this.#getTileId(x, y))
-			this.#setTileId(x, y, 0)
+			this.#setTileState(toX, toY, this.#getTileState(x, y))
+			this.#setTileState(x, y, 0)
 			this.game.output.moveTile(x, y, toX, toY)
 		}
 	}
