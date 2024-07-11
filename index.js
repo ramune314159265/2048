@@ -48,6 +48,14 @@ const run = () => {
 			this.#setTileId(x, y, state)
 			this.game.output.addTile(x, y, state)
 		}
+		moveTile(x, y, toX, toY) {
+			if (!this.isTileFilled(x, y) && this.isTileFilled(toX, toY)) {
+				return
+			}
+			this.#setTileId(toX, toY, this.#getTileId(x, y))
+			this.#setTileId(x, y, 0)
+			this.game.output.moveTile(x, y, toX, toY)
+		}
 	}
 
 	class GameInput extends EventRegister {
