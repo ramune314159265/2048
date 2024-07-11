@@ -56,6 +56,22 @@ const run = () => {
 			this.#setTileState(x, y, 0)
 			this.game.output.moveTile(x, y, toX, toY)
 		}
+		mergeTile(x, y, targetX, targetY) {
+			if (!this.isTileFilled(x, y) && !this.isTileFilled(targetX, targetY)) {
+				return
+			}
+			if (this.#getTileState(x, y) !== this.#getTileState(targetX, targetY)) {
+				return
+			}
+			this.#setTileState(targetX, targetY, this.#getTileState(targetX, targetY) + 1)
+			this.#setTileState(x, y, 0)
+
+			debugger
+			this.game.output.updateTile(targetX, targetY, this.#getTileState(targetX, targetY))
+			this.game.output.updateTile(x, y, this.#getTileState(targetX, targetY))
+			this.game.output.moveTile(x, y, targetX, targetY)
+			this.game.output.removeTile(x, y)
+		}
 	}
 
 	class GameInput extends EventRegister {
@@ -168,15 +184,6 @@ const run = () => {
 			if (!element) {
 				return
 			}
-			element.dataset.x = ''
-			element.dataset.y = ''
-			await element.animate([
-				{ scale: 1 },
-				{ scale: 0 }
-			], {
-				easing: animationEasing,
-				duration: animationDuration
-			}).finished
 			element.remove()
 		}
 	}
