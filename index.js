@@ -103,7 +103,7 @@ const run = () => {
 			this.element.style.gridTemplateRows = `repeat(${fieldHeight}, 80px)`
 			document.body.append(this.element)
 		}
-		addTile(x, y, state) {
+		async addTile(x, y, state) {
 			const newElement = document.createElement('div')
 			newElement.textContent = GameOutput.toDisplayNumber(state)
 			newElement.classList.add('fieldTile')
@@ -112,15 +112,15 @@ const run = () => {
 			newElement.dataset.x = x
 			newElement.dataset.y = y
 			this.element.append(newElement)
-			newElement.animate([
+			await newElement.animate([
 				{ scale: 0 },
 				{ scale: 1 }
 			], {
 				easing: 'cubic-bezier(0.22, 0.61, 0.36, 1)',
 				duration: 200
-			})
+			}).finished
 		}
-		moveTile(x, y, toX, toY) {
+		async moveTile(x, y, toX, toY) {
 			const element = this.element.querySelector(`[data-x="${x}"][data-y="${y}"]`)
 			if (!element) {
 				return
@@ -128,22 +128,29 @@ const run = () => {
 			element.dataset.x = toX
 			element.dataset.y = toY
 			element.style.translate = `${toX * (80 + 16)}px ${toY * (80 + 16)}px`
+			await element.animate([
+				{ translate: `${x * (80 + 16)}px ${y * (80 + 16)}px` },
+				{ translate: `${toX * (80 + 16)}px ${toY * (80 + 16)}px` }
+			], {
+				easing: 'cubic-bezier(0.22, 0.61, 0.36, 1)',
+				duration: 200
+			}).finished
 		}
-		updateTile(x, y, state) {
+		async updateTile(x, y, state) {
 			const element = this.element.querySelector(`[data-x="${x}"][data-y="${y}"]`)
 			if (!element) {
 				return
 			}
 			element.textContent = GameOutput.toDisplayNumber(state)
 			element.dataset.state = state
-			element.animate([
+			await element.animate([
 				{ scale: 1 },
 				{ scale: 1.1 },
 				{ scale: 1 }
 			], {
 				easing: 'cubic-bezier(0.22, 0.61, 0.36, 1)',
 				duration: 200
-			})
+			}).finished
 		}
 		async removeTile(x, y) {
 			const element = this.element.querySelector(`[data-x="${x}"][data-y="${y}"]`)
