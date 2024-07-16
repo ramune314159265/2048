@@ -5,6 +5,10 @@ const run = () => {
 	const animationDuration = 200
 	const animationEasing = 'cubic-bezier(0.22, 0.61, 0.36, 1)'
 
+	const availableTiles = [1, 1, 1, 1, 1, 1, 1, 1, 1, 2]
+	const appearTileLength = 1
+	const initAppearTileLength = 2
+
 	class EventRegister {
 		#events = {}
 
@@ -200,6 +204,36 @@ const run = () => {
 			this.field = new Field(this)
 			this.input = input
 			this.output = new GameOutput(this)
+			this.input.on('up', () => {
+				this.appearTile()
+			})
+			this.input.on('right', () => {
+				this.appearTile()
+			})
+			this.input.on('down', () => {
+				this.appearTile()
+			})
+			this.input.on('left', () => {
+				this.appearTile()
+			})
+			this.appearTile(initAppearTileLength)
+		}
+		appearTile(length) {
+			const blankTiles = []
+			this.field.data.forEach((line, y) => {
+				line.forEach((_, x) => {
+					if (!this.field.isTileFilled(x, y))
+						blankTiles.push([x, y])
+				})
+			})
+			const willFilledTileLength = Math.min(blankTiles.length, length || appearTileLength)
+			const targetTiles = [...Array(willFilledTileLength)].map(() => {
+				const randomStartIndex = Math.floor(Math.random() * blankTiles.length);
+				return [...blankTiles].splice(randomStartIndex, 1).at();
+			})
+			targetTiles.forEach(tile => {
+				this.field.addTile(tile[0], tile[1], availableTiles[Math.floor(Math.random() * availableTiles.length)])
+			})
 		}
 	}
 
