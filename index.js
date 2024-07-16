@@ -66,10 +66,7 @@ const run = () => {
 			this.#setTileState(targetX, targetY, this.#getTileState(targetX, targetY) + 1)
 			this.#setTileState(x, y, 0)
 
-			debugger
 			this.game.output.updateTile(targetX, targetY, this.#getTileState(targetX, targetY))
-			this.game.output.updateTile(x, y, this.#getTileState(targetX, targetY))
-			this.game.output.moveTile(x, y, targetX, targetY)
 			this.game.output.removeTile(x, y)
 		}
 	}
@@ -154,14 +151,14 @@ const run = () => {
 			}
 			element.dataset.x = toX
 			element.dataset.y = toY
-			element.style.translate = `${toX * (80 + 16)}px ${toY * (80 + 16)}px`
 			await element.animate([
 				{ translate: `${x * (80 + 16)}px ${y * (80 + 16)}px` },
 				{ translate: `${toX * (80 + 16)}px ${toY * (80 + 16)}px` }
 			], {
 				easing: animationEasing,
-				duration: animationDuration
+				duration: animationDuration,
 			}).finished
+			element.style.translate = `${toX * (80 + 16)}px ${toY * (80 + 16)}px`
 		}
 		async updateTile(x, y, state) {
 			const element = this.element.querySelector(`[data-x="${x}"][data-y="${y}"]`)
@@ -179,10 +176,19 @@ const run = () => {
 				duration: animationDuration
 			}).finished
 		}
-		async removeTile(x, y) {
+		async removeTile(x, y, toX, toY) {
 			const element = this.element.querySelector(`[data-x="${x}"][data-y="${y}"]`)
 			if (!element) {
 				return
+			}
+			if (toX !== undefined && toY !== undefined) {
+				await element.animate([
+					{ translate: `${x * (80 + 16)}px ${y * (80 + 16)}px` },
+					{ translate: `${toX * (80 + 16)}px ${toY * (80 + 16)}px` }
+				], {
+					easing: animationEasing,
+					duration: animationDuration,
+				}).finished
 			}
 			element.remove()
 		}
