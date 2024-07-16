@@ -67,7 +67,7 @@ const run = () => {
 			this.#setTileState(x, y, 0)
 
 			this.game.output.updateTile(targetX, targetY, this.#getTileState(targetX, targetY))
-			this.game.output.removeTile(x, y)
+			this.game.output.removeTile(x, y, targetX, targetY)
 		}
 	}
 
@@ -182,6 +182,7 @@ const run = () => {
 				return
 			}
 			if (toX !== undefined && toY !== undefined) {
+				element.style.zIndex = 0
 				await element.animate([
 					{ translate: `${x * (80 + 16)}px ${y * (80 + 16)}px` },
 					{ translate: `${toX * (80 + 16)}px ${toY * (80 + 16)}px` }

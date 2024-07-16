@@ -49,4 +49,5 @@ body {
 	font-size: 2rem;
 	color: white;
 	background: black;
+	z-index: 1;
 }
