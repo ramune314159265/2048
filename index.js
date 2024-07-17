@@ -9,6 +9,8 @@ const run = () => {
 	const appearTileLength = 1
 	const initAppearTileLength = 2
 
+	const minimumTouchDistance = 50
+
 	class EventRegister {
 		#events = {}
 
@@ -85,6 +87,9 @@ const run = () => {
 		constructor() {
 			super()
 			this.keyDownHandler = () => { }
+			this.touchStartHandler = () => { }
+			this.touchMoveHandler = () => { }
+			this.touchEndHandler = () => { }
 			this.init()
 		}
 		init() {
@@ -107,7 +112,50 @@ const run = () => {
 						break
 				}
 			}
-			document.body.addEventListener('keydown', this.keyDownHandler)
+			let startX = 0
+			let startY = 0
+			let endX = 0
+			let endY = 0
+			this.touchStartHandler = e => {
+				e.preventDefault()
+				startX = e.touches[0].pageX
+				startY = e.touches[0].pageY
+			}
+			this.touchMoveHandler = e => {
+				e.preventDefault()
+				endX = e.changedTouches[0].pageX
+				endY = e.changedTouches[0].pageY
+			}
+			this.touchEndHandler = e => {
+				const distanceX = endX - startX
+				const distanceY = endY - startY
+				const absDistanceX = Math.abs(distanceX)
+				const absDistanceY = Math.abs(distanceY)
+				console.log(distanceX, distanceY)
+				if (absDistanceX < minimumTouchDistance && absDistanceY < minimumTouchDistance) {
+					return
+				}
+				if (absDistanceX < absDistanceY && distanceY < 0) {
+					this.emit('up')
+					return
+				}
+				if (absDistanceY < absDistanceX && 0 < distanceX) {
+					this.emit('right')
+					return
+				}
+				if (absDistanceX < absDistanceY && 0 < distanceY) {
+					this.emit('down')
+					return
+				}
+				if (absDistanceY < absDistanceX && distanceY < 0) {
+					this.emit('left')
+					return
+				}
+			}
+			document.addEventListener('keydown', this.keyDownHandler)
+			document.body.addEventListener('touchstart', this.touchStartHandler)
+			document.body.addEventListener('touchmove', this.touchMoveHandler)
+			document.body.addEventListener('touchend', this.touchEndHandler)
 		}
 	}
 
@@ -205,15 +253,19 @@ const run = () => {
 			this.input = input
 			this.output = new GameOutput(this)
 			this.input.on('up', () => {
+				console.log('up')
 				this.appearTile()
 			})
 			this.input.on('right', () => {
+				console.log('right')
 				this.appearTile()
 			})
 			this.input.on('down', () => {
+				console.log('down')
 				this.appearTile()
 			})
 			this.input.on('left', () => {
+				console.log('left')
 				this.appearTile()
 			})
 			this.appearTile(initAppearTileLength)
@@ -235,6 +287,7 @@ const run = () => {
 				this.field.addTile(tile[0], tile[1], availableTiles[Math.floor(Math.random() * availableTiles.length)])
 			})
 		}
+
 	}
 
 	const keyInput = new KeyboardInput()

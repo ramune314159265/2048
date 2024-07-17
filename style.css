@@ -12,6 +12,10 @@
 	margin: 0;
 }
 
+html {
+	overscroll-behavior: none;
+}
+
 body {
 	background: var(--background-color);
 	width: 100dvw;
