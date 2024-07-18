@@ -147,7 +147,7 @@ const run = () => {
 					this.emit('down')
 					return
 				}
-				if (absDistanceY < absDistanceX && distanceY < 0) {
+				if (absDistanceY < absDistanceX && distanceX < 0) {
 					this.emit('left')
 					return
 				}
