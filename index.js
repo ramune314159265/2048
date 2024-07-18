@@ -129,7 +129,6 @@ const run = () => {
 				const distanceY = endY - startY
 				const absDistanceX = Math.abs(distanceX)
 				const absDistanceY = Math.abs(distanceY)
-				console.log(distanceX, distanceY)
 				if (absDistanceX < minimumTouchDistance && absDistanceY < minimumTouchDistance) {
 					return
 				}
@@ -251,19 +250,15 @@ const run = () => {
 			this.input = input
 			this.output = new GameOutput(this)
 			this.input.on('up', () => {
-				console.log('up')
 				this.appearTile()
 			})
 			this.input.on('right', () => {
-				console.log('right')
 				this.appearTile()
 			})
 			this.input.on('down', () => {
-				console.log('down')
 				this.appearTile()
 			})
 			this.input.on('left', () => {
-				console.log('left')
 				this.appearTile()
 			})
 			this.appearTile(initAppearTileLength)
@@ -296,7 +291,7 @@ const run = () => {
 		console.log(gameMain)
 	})
 
-	document.addEventListener('touchmove', e => e.preventDefault(), { passive: false },)
+	document.addEventListener('touchstart', e => e.preventDefault(), { passive: false },)
 }
 
 run()
