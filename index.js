@@ -117,12 +117,10 @@ const run = () => {
 			let endX = 0
 			let endY = 0
 			this.touchStartHandler = e => {
-				e.preventDefault()
 				startX = e.touches[0].pageX
 				startY = e.touches[0].pageY
 			}
 			this.touchMoveHandler = e => {
-				e.preventDefault()
 				endX = e.changedTouches[0].pageX
 				endY = e.changedTouches[0].pageY
 			}
@@ -153,9 +151,9 @@ const run = () => {
 				}
 			}
 			document.addEventListener('keydown', this.keyDownHandler)
-			document.body.addEventListener('touchstart', this.touchStartHandler)
-			document.body.addEventListener('touchmove', this.touchMoveHandler)
-			document.body.addEventListener('touchend', this.touchEndHandler)
+			document.addEventListener('touchstart', this.touchStartHandler)
+			document.addEventListener('touchmove', this.touchMoveHandler, { passive: true })
+			document.addEventListener('touchend', this.touchEndHandler, { passive: true })
 		}
 	}
 
@@ -297,6 +295,8 @@ const run = () => {
 		gameMain.output.emit('data', gameMain)
 		console.log(gameMain)
 	})
+
+	document.addEventListener('touchmove', e => e.preventDefault(), { passive: false },)
 }
 
 run()
