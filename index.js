@@ -58,8 +58,9 @@ const run = () => {
 			if (!this.isTileFilled(x, y) && this.isTileFilled(toX, toY)) {
 				return
 			}
-			this.#setTileState(toX, toY, this.getTileState(x, y))
+			const originTileState = this.getTileState(x, y)
 			this.#setTileState(x, y, 0)
+			this.#setTileState(toX, toY, originTileState)
 			this.game.output.moveTile(x, y, toX, toY)
 		}
 		mergeTile(x, y, targetX, targetY) {
@@ -67,7 +68,7 @@ const run = () => {
 				return
 			}
 			if (this.getTileState(x, y) !== this.getTileState(targetX, targetY)) {
-				return
+				throw new Error('!!!')
 			}
 			this.#setTileState(targetX, targetY, this.getTileState(targetX, targetY) + 1)
 			this.#setTileState(x, y, 0)
@@ -285,13 +286,13 @@ const run = () => {
 			})
 		}
 		move(direction) {
+			const directionDict = {
+				'up': 0,    //00
+				'down': 1,  //01
+				'left': 2,  //10
+				'right': 3, //11
+			}
 			const xyConverterByDirection = (x, y, direction) => {
-				const directionDict = {
-					'up': 0,
-					'right': 1,
-					'left': 2,
-					'down': 3,
-				}
 				const directionNum = directionDict[direction]
 				let result = [x, y]
 				if (directionNum.toString(2).at(-1) === '1') {
@@ -302,12 +303,6 @@ const run = () => {
 				}
 				return result
 			}
-			const directionDict = {
-				'up': 0,
-				'down': 1,
-				'right': 2,
-				'left': 3,
-			}
 			const directionBit = directionDict[direction].toString(2).padStart(2, '0')
 			this.field.data.forEach((line, y) => {
 				line.forEach((_, x) => {
@@ -315,27 +310,38 @@ const run = () => {
 					if (!this.field.isTileFilled(convertedX, convertedY)) {
 						return
 					}
-					console.log(convertedX, convertedY)
-					//debugger
-					for (let i = 1; i < directionBit.at(-2) === '1' ? fieldWidth : fieldHeight; i++) {
+					for (let i = 1; true; i++) {
 						// 上下方向
 						if (directionBit.at(-2) === '0') {
 							const positionY = directionBit.at(-1) === '1' ? convertedY + i : convertedY - i
 							if (!this.field.isTileFilled(convertedX, positionY)) {
 								continue
 							}
+							if (convertedY === positionY) {
+								continue
+							}
 							const selfTileState = this.field.getTileState(convertedX, convertedY)
+							selfTileState === this.field.getTileState(convertedX, positionY)
+								? console.log('merge', convertedX, convertedY, convertedX, positionY)
+								: console.log('move', convertedX, convertedY, convertedX, directionBit.at(-1) === '1' ? positionY - 1 : positionY + 1)
 							selfTileState === this.field.getTileState(convertedX, positionY)
 								? this.field.mergeTile(convertedX, convertedY, convertedX, positionY)
 								: this.field.moveTile(convertedX, convertedY, convertedX, directionBit.at(-1) === '1' ? positionY - 1 : positionY + 1)
 							break
-						} /*左右方向*/else {
+						} /*左右方向*/else if (directionBit.at(-2) === '1') {
 							const positionX = directionBit.at(-1) === '1' ? convertedX + i : convertedX - i
 							if (!this.field.isTileFilled(positionX, convertedY)) {
 								continue
 							}
+							if (convertedX === positionX) {
+								continue
+							}
 							const selfTileState = this.field.getTileState(convertedX, convertedY)
-							selfTileState === this.field.getTileState(positionX, convertedX)
+
+							selfTileState === this.field.getTileState(positionX, convertedY)
+								? console.log('merge', convertedX, convertedY, positionX, convertedY)
+								: console.log('move', convertedX, convertedY, directionBit.at(-1) === '1' ? positionX - 1 : positionX + 1, convertedY)
+							selfTileState === this.field.getTileState(positionX, convertedY)
 								? this.field.mergeTile(convertedX, convertedY, positionX, convertedY)
 								: this.field.moveTile(convertedX, convertedY, directionBit.at(-1) === '1' ? positionX - 1 : positionX + 1, convertedY)
 							break
@@ -343,6 +349,7 @@ const run = () => {
 					}
 				})
 			})
+			console.log('------')
 		}
 	}
 
