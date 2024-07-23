@@ -157,6 +157,20 @@ const run = () => {
 		}
 	}
 
+	class RandomInput extends GameInput {
+		constructor() {
+			super()
+			this.intervalId = 0
+			this.controls = ['up', 'right', 'left']
+			this.init()
+		}
+		init() {
+			this.intervalId = setInterval(() => {
+				this.emit(this.controls[Math.floor(Math.random() * this.controls.length)])
+			}, animationDuration);
+		}
+	}
+
 	class GameOutput extends EventRegister {
 		static toDisplayNumber(state) {
 			return 2 ** state
@@ -354,7 +368,8 @@ const run = () => {
 	}
 
 	const keyInput = new KeyboardInput()
-	const gameMain = new Game(keyInput)
+	const randomInput = new RandomInput()
+	const gameMain = new Game(randomInput)
 
 	document.body.addEventListener('click', () => {
 		gameMain.output.emit('data', gameMain)
