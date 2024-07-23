@@ -167,7 +167,26 @@ const run = () => {
 		init() {
 			this.intervalId = setInterval(() => {
 				this.emit(this.controls[Math.floor(Math.random() * this.controls.length)])
-			}, animationDuration);
+			}, animationDuration)
+		}
+	}
+
+	class OrderInput extends GameInput {
+		constructor() {
+			super()
+			this.intervalId = 0
+			this.controls = ['right', 'up', '']
+			this.order = 0
+			this.init()
+		}
+		init() {
+			this.intervalId = setInterval(() => {
+				this.emit(this.controls[this.order])
+				this.order++
+				if (this.controls.length < this.order) {
+					this.order = 0
+				}
+			}, animationDuration)
 		}
 	}
 
@@ -363,7 +382,8 @@ const run = () => {
 
 	const keyInput = new KeyboardInput()
 	const randomInput = new RandomInput()
-	const gameMain = new Game(randomInput)
+	const orderInput = new OrderInput()
+	const gameMain = new Game(orderInput)
 
 	document.body.addEventListener('click', () => {
 		gameMain.output.emit('data', gameMain)
