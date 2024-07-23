@@ -292,18 +292,18 @@ const run = () => {
 				'left': 2,  //10
 				'right': 3, //11
 			}
+			const directionBit = directionDict[direction].toString(2).padStart(2, '0')
 			const xyConverterByDirection = (x, y, direction) => {
 				const directionNum = directionDict[direction]
 				let result = [x, y]
-				if (directionNum.toString(2).at(-1) === '1') {
+				if (directionBit.at(-1) === '1') {
 					result = [fieldWidth - x - 1, fieldHeight - y - 1]
 				}
-				if (directionNum.toString(2).at(-2) === '1') {
+				if (directionBit.at(-2) === '1') {
 					result = result.toReversed()
 				}
 				return result
 			}
-			const directionBit = directionDict[direction].toString(2).padStart(2, '0')
 			this.field.data.forEach((line, y) => {
 				line.forEach((_, x) => {
 					const [convertedX, convertedY] = xyConverterByDirection(x, y, direction)
