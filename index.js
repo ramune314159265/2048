@@ -247,6 +247,8 @@ const run = () => {
 			}
 			if (toX !== undefined && toY !== undefined) {
 				element.style.zIndex = 0
+				delete element.dataset.x
+				delete element.dataset.y
 				await element.animate([
 					{ translate: `${x * (80 + 16)}px ${y * (80 + 16)}px` },
 					{ translate: `${toX * (80 + 16)}px ${toY * (80 + 16)}px` }
