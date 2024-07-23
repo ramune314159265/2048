@@ -336,9 +336,6 @@ const run = () => {
 							}
 							const selfTileState = this.field.getTileState(convertedX, convertedY)
 							selfTileState === this.field.getTileState(convertedX, positionY)
-								? console.log('merge', convertedX, convertedY, convertedX, positionY)
-								: console.log('move', convertedX, convertedY, convertedX, directionBit.at(-1) === '1' ? positionY - 1 : positionY + 1)
-							selfTileState === this.field.getTileState(convertedX, positionY)
 								? this.field.mergeTile(convertedX, convertedY, convertedX, positionY)
 								: this.field.moveTile(convertedX, convertedY, convertedX, directionBit.at(-1) === '1' ? positionY - 1 : positionY + 1)
 							break
@@ -351,10 +348,6 @@ const run = () => {
 								continue
 							}
 							const selfTileState = this.field.getTileState(convertedX, convertedY)
-
-							selfTileState === this.field.getTileState(positionX, convertedY)
-								? console.log('merge', convertedX, convertedY, positionX, convertedY)
-								: console.log('move', convertedX, convertedY, directionBit.at(-1) === '1' ? positionX - 1 : positionX + 1, convertedY)
 							selfTileState === this.field.getTileState(positionX, convertedY)
 								? this.field.mergeTile(convertedX, convertedY, positionX, convertedY)
 								: this.field.moveTile(convertedX, convertedY, directionBit.at(-1) === '1' ? positionX - 1 : positionX + 1, convertedY)
@@ -363,7 +356,6 @@ const run = () => {
 					}
 				})
 			})
-			console.log('------')
 		}
 	}
 
