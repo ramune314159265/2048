@@ -286,20 +286,28 @@ const run = () => {
 			this.input = input
 			this.output = new GameOutput(this)
 			this.input.on('up', () => {
-				this.move('up')
-				this.appearTile()
+				const moved = this.move('up')
+				if (moved.length !== 0) {
+					this.appearTile()
+				}
 			})
 			this.input.on('right', () => {
-				this.move('right')
-				this.appearTile()
+				const moved = this.move('right')
+				if (moved.length !== 0) {
+					this.appearTile()
+				}
 			})
 			this.input.on('down', () => {
-				this.move('down')
-				this.appearTile()
+				const moved = this.move('down')
+				if (moved.length !== 0) {
+					this.appearTile()
+				}
 			})
 			this.input.on('left', () => {
-				this.move('left')
-				this.appearTile()
+				const moved = this.move('left')
+				if (moved.length !== 0) {
+					this.appearTile()
+				}
 			})
 			this.appearTile(initAppearTileLength)
 		}
@@ -321,6 +329,7 @@ const run = () => {
 			})
 		}
 		move(direction) {
+			const moved = []
 			const directionDict = {
 				'up': 0,    //00
 				'down': 1,  //01
@@ -329,7 +338,6 @@ const run = () => {
 			}
 			const directionBit = directionDict[direction].toString(2).padStart(2, '0')
 			const xyConverterByDirection = (x, y, direction) => {
-				const directionNum = directionDict[direction]
 				let result = [x, y]
 				if (directionBit.at(-1) === '1') {
 					result = [fieldWidth - x - 1, fieldHeight - y - 1]
@@ -356,9 +364,13 @@ const run = () => {
 								continue
 							}
 							const selfTileState = this.field.getTileState(convertedX, convertedY)
-							selfTileState === this.field.getTileState(convertedX, positionY)
-								? this.field.mergeTile(convertedX, convertedY, convertedX, positionY)
-								: this.field.moveTile(convertedX, convertedY, convertedX, directionBit.at(-1) === '1' ? positionY - 1 : positionY + 1)
+							if (selfTileState === this.field.getTileState(convertedX, positionY)) {
+								this.field.mergeTile(convertedX, convertedY, convertedX, positionY)
+								moved.push([convertedX, convertedY, convertedX, positionY])
+							} else {
+								this.field.moveTile(convertedX, convertedY, convertedX, directionBit.at(-1) === '1' ? positionY - 1 : positionY + 1)
+								moved.push([convertedX, convertedY, convertedX, directionBit.at(-1) === '1' ? positionY - 1 : positionY + 1])
+							}
 							break
 						} /*左右方向*/else if (directionBit.at(-2) === '1') {
 							const positionX = directionBit.at(-1) === '1' ? convertedX + i : convertedX - i
@@ -369,21 +381,26 @@ const run = () => {
 								continue
 							}
 							const selfTileState = this.field.getTileState(convertedX, convertedY)
-							selfTileState === this.field.getTileState(positionX, convertedY)
-								? this.field.mergeTile(convertedX, convertedY, positionX, convertedY)
-								: this.field.moveTile(convertedX, convertedY, directionBit.at(-1) === '1' ? positionX - 1 : positionX + 1, convertedY)
+							if (selfTileState === this.field.getTileState(positionX, convertedY)) {
+								this.field.mergeTile(convertedX, convertedY, positionX, convertedY)
+								moved.push([convertedX, convertedY, positionX, convertedY])
+							} else {
+								this.field.moveTile(convertedX, convertedY, directionBit.at(-1) === '1' ? positionX - 1 : positionX + 1, convertedY)
+								moved.push([convertedX, convertedY, directionBit.at(-1) === '1' ? positionX - 1 : positionX + 1, convertedY])
+							}
 							break
 						}
 					}
 				})
 			})
+			return moved.filter(i => i[0] !== i[2] || i[1] !== i[3])
 		}
 	}
 
 	const keyInput = new KeyboardInput()
 	const randomInput = new RandomInput()
 	const orderInput = new OrderInput()
-	const gameMain = new Game(orderInput)
+	const gameMain = new Game(keyInput)
 
 	document.body.addEventListener('click', () => {
 		gameMain.output.emit('data', gameMain)
