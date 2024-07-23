@@ -57,3 +57,47 @@ body {
 	background: black;
 	z-index: 1;
 }
+
+.fieldTile[data-state="1"] {
+	background-color: #0ebeff;
+}
+
+.fieldTile[data-state="2"] {
+	background-color: #22adfd;
+}
+
+.fieldTile[data-state="3"] {
+	background-color: #369bfc;
+}
+
+.fieldTile[data-state="4"] {
+	background-color: #4a8afa;
+}
+
+.fieldTile[data-state="5"] {
+	background-color: #5e79f8;
+}
+
+.fieldTile[data-state="6"] {
+	background-color: #7268f7;
+}
+
+.fieldTile[data-state="7"] {
+	background-color: #8556f5;
+}
+
+.fieldTile[data-state="8"] {
+	background-color: #9945f3;
+}
+
+.fieldTile[data-state="9"] {
+	background-color: #ad34f1;
+}
+
+.fieldTile[data-state="10"] {
+	background-color: #c122f0;
+}
+
+.fieldTile[data-state="11"] {
+	background-color: #d511ee;
+}
