@@ -44,8 +44,8 @@ export class Game {
 		})
 		const willFilledTileLength = Math.min(blankTiles.length, length || appearTileLength)
 		const targetTiles = [...Array(willFilledTileLength)].map(() => {
-			const randomStartIndex = Math.floor(Math.random() * blankTiles.length);
-			return [...blankTiles].splice(randomStartIndex, 1).at();
+			const randomStartIndex = Math.floor(Math.random() * blankTiles.length)
+			return [...blankTiles].splice(randomStartIndex, 1).at()
 		})
 		targetTiles.forEach(tile => {
 			this.field.addTile(tile[0], tile[1], randomFromArray(availableTiles))
@@ -60,7 +60,7 @@ export class Game {
 			'right': 3, //11
 		}
 		const directionBit = directionDict[direction].toString(2).padStart(2, '0')
-		const xyConverterByDirection = (x, y, direction) => {
+		const xyConverterByDirection = (x, y) => {
 			let result = [x, y]
 			if (directionBit.at(-1) === '1') {
 				result = [fieldWidth - x - 1, fieldHeight - y - 1]
@@ -72,11 +72,11 @@ export class Game {
 		}
 		this.field.data.forEach((line, y) => {
 			line.forEach((_, x) => {
-				const [convertedX, convertedY] = xyConverterByDirection(x, y, direction)
+				const [convertedX, convertedY] = xyConverterByDirection(x, y)
 				if (!this.field.isTileFilled(convertedX, convertedY)) {
 					return
 				}
-				for (let i = 1; true; i++) {
+				for (let i = 1; ; i++) {
 					// 上下方向
 					if (directionBit.at(-2) === '0') {
 						const positionY = directionBit.at(-1) === '1' ? convertedY + i : convertedY - i

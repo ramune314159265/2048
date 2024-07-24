@@ -1,3 +1,4 @@
+import { minimumTouchDistance } from '../configs.js'
 import { GameInput } from './index.js'
 
 export class KeyboardInput extends GameInput {
@@ -41,7 +42,7 @@ export class KeyboardInput extends GameInput {
 			endX = e.changedTouches[0].pageX
 			endY = e.changedTouches[0].pageY
 		}
-		this.touchEndHandler = e => {
+		this.touchEndHandler = () => {
 			const distanceX = endX - startX
 			const distanceY = endY - startY
 			const absDistanceX = Math.abs(distanceX)
