@@ -1,11 +1,12 @@
 import { animationDuration } from '../configs.js'
+import { directions } from '../enum.js'
 import { GameInput } from './index.js'
 
 export class OrderInput extends GameInput {
 	constructor() {
 		super()
 		this.intervalId = 0
-		this.controls = ['right', 'up', '']
+		this.controls = [directions.right, directions.up, '']
 		this.order = 0
 		this.init()
 	}

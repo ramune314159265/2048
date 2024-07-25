@@ -1,4 +1,5 @@
 import { appearTileLength, availableTiles, fieldHeight, fieldWidth, initAppearTileLength } from './configs.js'
+import { directions } from './enum.js'
 import { Field } from './field.js'
 import { GameOutput } from './outputs/index.js'
 import { randomFromArray } from './util/random.js'
@@ -8,26 +9,26 @@ export class Game {
 		this.field = new Field(this)
 		this.input = input
 		this.output = new GameOutput(this)
-		this.input.on('up', () => {
-			const moved = this.move('up')
+		this.input.on(directions.up, () => {
+			const moved = this.move(directions.up)
 			if (moved.length !== 0) {
 				this.appearTile()
 			}
 		})
-		this.input.on('right', () => {
-			const moved = this.move('right')
+		this.input.on(directions.right, () => {
+			const moved = this.move(directions.right)
 			if (moved.length !== 0) {
 				this.appearTile()
 			}
 		})
-		this.input.on('down', () => {
-			const moved = this.move('down')
+		this.input.on(directions.down, () => {
+			const moved = this.move(directions.down)
 			if (moved.length !== 0) {
 				this.appearTile()
 			}
 		})
-		this.input.on('left', () => {
-			const moved = this.move('left')
+		this.input.on(directions.left, () => {
+			const moved = this.move(directions.left)
 			if (moved.length !== 0) {
 				this.appearTile()
 			}
@@ -54,10 +55,10 @@ export class Game {
 	move(direction) {
 		const moved = []
 		const directionDict = {
-			'up': 0,    //00
-			'down': 1,  //01
-			'left': 2,  //10
-			'right': 3, //11
+			[directions.up]: 0,    //00
+			[directions.down]: 1,  //01
+			[directions.left]: 2,  //10
+			[directions.right]: 3, //11
 		}
 		const directionBit = directionDict[direction].toString(2).padStart(2, '0')
 		const xyConverterByDirection = (x, y) => {

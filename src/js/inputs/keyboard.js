@@ -1,4 +1,5 @@
 import { minimumTouchDistance } from '../configs.js'
+import { directions } from '../enum.js'
 import { GameInput } from './index.js'
 
 export class KeyboardInput extends GameInput {
@@ -15,16 +16,16 @@ export class KeyboardInput extends GameInput {
 			e.preventDefault()
 			switch (true) {
 				case e.key === 'ArrowUp' || e.key === 'w':
-					this.emit('up')
+					this.emit(directions.up)
 					break
 				case e.key === 'ArrowLeft' || e.key === 'a':
-					this.emit('left')
+					this.emit(directions.left)
 					break
 				case e.key === 'ArrowDown' || e.key === 's':
-					this.emit('down')
+					this.emit(directions.down)
 					break
 				case e.key === 'ArrowRight' || e.key === 'd':
-					this.emit('right')
+					this.emit(directions.right)
 					break
 				default:
 					break
@@ -51,19 +52,19 @@ export class KeyboardInput extends GameInput {
 				return
 			}
 			if (absDistanceX < absDistanceY && distanceY < 0) {
-				this.emit('up')
+				this.emit(directions.up)
 				return
 			}
 			if (absDistanceY < absDistanceX && 0 < distanceX) {
-				this.emit('right')
+				this.emit(directions.right)
 				return
 			}
 			if (absDistanceX < absDistanceY && 0 < distanceY) {
-				this.emit('down')
+				this.emit(directions.down)
 				return
 			}
 			if (absDistanceY < absDistanceX && distanceX < 0) {
-				this.emit('left')
+				this.emit(directions.left)
 				return
 			}
 		}

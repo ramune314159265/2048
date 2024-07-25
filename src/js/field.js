@@ -41,7 +41,7 @@ export class Field {
 			return
 		}
 		if (this.getTileState(x, y) !== this.getTileState(targetX, targetY)) {
-			throw new Error('!!!')
+			return
 		}
 		this.#setTileState(targetX, targetY, this.getTileState(targetX, targetY) + 1)
 		this.#setTileState(x, y, 0)
