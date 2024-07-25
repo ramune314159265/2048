@@ -1,4 +1,5 @@
 import { animationDuration, animationEasing, fieldHeight, fieldWidth } from '../configs.js'
+import { outputCommands } from '../enum.js'
 import { EventRegister } from '../util/eventRegister.js'
 
 export class GameOutput extends EventRegister {
@@ -20,8 +21,12 @@ export class GameOutput extends EventRegister {
 		this.element.style.gridTemplateColumns = `repeat(${fieldWidth}, 80px)`
 		this.element.style.gridTemplateRows = `repeat(${fieldHeight}, 80px)`
 		document.body.append(this.element)
+		this.on(outputCommands.add, (x, y, state) => this.#addTile(x, y, state))
+		this.on(outputCommands.move, (x, y, toX, toY) => this.#moveTile(x, y, toX, toY))
+		this.on(outputCommands.update, (x, y, state) => this.#updateTile(x, y, state))
+		this.on(outputCommands.remove, (x, y, toX, toY) => this.#removeTile(x, y, toX, toY))
 	}
-	async addTile(x, y, state) {
+	async #addTile(x, y, state) {
 		const newElement = document.createElement('div')
 		newElement.textContent = GameOutput.toDisplayNumber(state)
 		newElement.classList.add('fieldTile')
@@ -38,7 +43,7 @@ export class GameOutput extends EventRegister {
 			duration: animationDuration
 		}).finished
 	}
-	async moveTile(x, y, toX, toY) {
+	async #moveTile(x, y, toX, toY) {
 		const element = this.element.querySelector(`[data-x="${x}"][data-y="${y}"]`)
 		if (!element) {
 			return
@@ -54,7 +59,7 @@ export class GameOutput extends EventRegister {
 		}).finished
 		element.style.translate = `${toX * (80 + 16)}px ${toY * (80 + 16)}px`
 	}
-	async updateTile(x, y, state) {
+	async #updateTile(x, y, state) {
 		const element = this.element.querySelector(`[data-x="${x}"][data-y="${y}"]`)
 		if (!element) {
 			return
@@ -70,7 +75,7 @@ export class GameOutput extends EventRegister {
 			duration: animationDuration
 		}).finished
 	}
-	async removeTile(x, y, toX, toY) {
+	async #removeTile(x, y, toX, toY) {
 		const element = this.element.querySelector(`[data-x="${x}"][data-y="${y}"]`)
 		if (!element) {
 			return

@@ -1,4 +1,5 @@
 import { fieldHeight, fieldWidth } from './configs.js'
+import { outputCommands } from './enum.js'
 
 export class Field {
 	constructor(game) {
@@ -25,7 +26,7 @@ export class Field {
 			return
 		}
 		this.#setTileState(x, y, state)
-		this.game.output.addTile(x, y, state)
+		this.game.output.emit(outputCommands.add,x,y,state)
 	}
 	moveTile(x, y, toX, toY) {
 		if (!this.isTileFilled(x, y) && this.isTileFilled(toX, toY)) {
@@ -34,7 +35,7 @@ export class Field {
 		const originTileState = this.getTileState(x, y)
 		this.#setTileState(x, y, 0)
 		this.#setTileState(toX, toY, originTileState)
-		this.game.output.moveTile(x, y, toX, toY)
+		this.game.output.emit(outputCommands.move,x, y, toX, toY)
 	}
 	mergeTile(x, y, targetX, targetY) {
 		if (!this.isTileFilled(x, y) && !this.isTileFilled(targetX, targetY)) {
@@ -46,7 +47,7 @@ export class Field {
 		this.#setTileState(targetX, targetY, this.getTileState(targetX, targetY) + 1)
 		this.#setTileState(x, y, 0)
 
-		this.game.output.updateTile(targetX, targetY, this.getTileState(targetX, targetY))
-		this.game.output.removeTile(x, y, targetX, targetY)
+		this.game.output.emit(outputCommands.update,targetX, targetY, this.getTileState(targetX, targetY))
+		this.game.output.emit(outputCommands.remove,x, y, targetX, targetY)
 	}
 }
