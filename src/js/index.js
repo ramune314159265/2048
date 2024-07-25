@@ -5,9 +5,9 @@ import { GameOutput } from './outputs/index.js'
 import { randomFromArray } from './util/random.js'
 
 export class Game {
-	constructor(input) {
+	constructor(InputClass) {
 		this.field = new Field(this)
-		this.input = input
+		this.input = new InputClass(this)
 		this.output = new GameOutput(this)
 		this.input.on(directions.up, () => {
 			const moved = this.move(directions.up)

@@ -4,8 +4,8 @@ import { randomFromArray } from '../util/random.js'
 import { GameInput } from './index.js'
 
 export class RandomInput extends GameInput {
-	constructor() {
-		super()
+	constructor(game) {
+		super(game)
 		this.intervalId = 0
 		this.controls = [directions.up, directions.right, directions.left]
 		this.init()

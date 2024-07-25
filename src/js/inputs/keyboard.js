@@ -3,8 +3,8 @@ import { directions } from '../enum.js'
 import { GameInput } from './index.js'
 
 export class KeyboardInput extends GameInput {
-	constructor() {
-		super()
+	constructor(game) {
+		super(game)
 		this.keyDownHandler = () => { }
 		this.touchStartHandler = () => { }
 		this.touchMoveHandler = () => { }

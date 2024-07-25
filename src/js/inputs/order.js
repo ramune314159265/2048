@@ -3,8 +3,8 @@ import { directions } from '../enum.js'
 import { GameInput } from './index.js'
 
 export class OrderInput extends GameInput {
-	constructor() {
-		super()
+	constructor(game) {
+		super(game)
 		this.intervalId = 0
 		this.controls = [directions.right, directions.up, directions.left]
 		this.order = 0
