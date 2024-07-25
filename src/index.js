@@ -8,7 +8,7 @@ const run = () => {
 	const keyInput = new KeyboardInput()
 	const randomInput = new RandomInput()
 	const orderInput = new OrderInput()
-	const gameMain = new Game(keyInput)
+	const gameMain = new Game(randomInput)
 
 	document.body.addEventListener('click', () => {
 		console.log(gameMain)
