@@ -1,11 +1,24 @@
-export const fieldWidth = 4
-export const fieldHeight = 4
+export class Config {
+	constructor({
+		fieldWidth,
+		fieldHeight,
+		animationDuration,
+		animationEasing,
+		availableTiles,
+		appearTileLength,
+		initAppearTileLength,
+		minimumTouchDistance
+	}) {
+		this.fieldWidth = fieldWidth ?? 4
+		this.fieldHeight = fieldHeight ?? 4
 
-export const animationDuration = 200
-export const animationEasing = 'cubic-bezier(0.22, 0.61, 0.36, 1)'
+		this.animationDuration = animationDuration ?? 200
+		this.animationEasing = animationEasing ?? 'cubic-bezier(0.22, 0.61, 0.36, 1)'
 
-export const availableTiles = [1, 1, 1, 1, 1, 1, 1, 1, 1, 2]
-export const appearTileLength = 1
-export const initAppearTileLength = 2
+		this.availableTiles = availableTiles ?? [1, 1, 1, 1, 1, 1, 1, 1, 1, 2]
+		this.appearTileLength = appearTileLength ?? 1
+		this.initAppearTileLength = initAppearTileLength ?? 2
 
-export const minimumTouchDistance = 50
+		this.minimumTouchDistance = minimumTouchDistance ?? 50
+	}
+}

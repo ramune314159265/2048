@@ -1,4 +1,3 @@
-import { animationDuration } from '../configs.js'
 import { directions } from '../enum.js'
 import { GameInput } from './index.js'
 
@@ -17,6 +16,6 @@ export class OrderInput extends GameInput {
 			if (this.controls.length <= this.order) {
 				this.order = 0
 			}
-		}, animationDuration)
+		}, this.game.config.animationDuration)
 	}
 }

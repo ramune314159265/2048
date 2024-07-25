@@ -1,4 +1,3 @@
-import { animationDuration, animationEasing, fieldHeight, fieldWidth } from '../configs.js'
 import { outputCommands } from '../enum.js'
 import { EventRegister } from '../util/eventRegister.js'
 
@@ -18,8 +17,8 @@ export class GameOutput extends EventRegister {
 			})
 		})
 		this.element.classList.add('field')
-		this.element.style.gridTemplateColumns = `repeat(${fieldWidth}, 80px)`
-		this.element.style.gridTemplateRows = `repeat(${fieldHeight}, 80px)`
+		this.element.style.gridTemplateColumns = `repeat(${this.game.config.fieldWidth}, 80px)`
+		this.element.style.gridTemplateRows = `repeat(${this.game.config.fieldHeight}, 80px)`
 		document.body.append(this.element)
 		this.on(outputCommands.add, (x, y, state) => this.#addTile(x, y, state))
 		this.on(outputCommands.move, (x, y, toX, toY) => this.#moveTile(x, y, toX, toY))
@@ -39,8 +38,8 @@ export class GameOutput extends EventRegister {
 			{ scale: 0 },
 			{ scale: 1 }
 		], {
-			easing: animationEasing,
-			duration: animationDuration
+			easing: this.game.config.animationEasing,
+			duration: this.game.config.animationDuration
 		}).finished
 	}
 	async #moveTile(x, y, toX, toY) {
@@ -54,8 +53,8 @@ export class GameOutput extends EventRegister {
 			{ translate: `${x * (80 + 16)}px ${y * (80 + 16)}px` },
 			{ translate: `${toX * (80 + 16)}px ${toY * (80 + 16)}px` }
 		], {
-			easing: animationEasing,
-			duration: animationDuration,
+			easing: this.game.config.animationEasing,
+			duration: this.game.config.animationDuration,
 		}).finished
 		element.style.translate = `${toX * (80 + 16)}px ${toY * (80 + 16)}px`
 	}
@@ -71,8 +70,8 @@ export class GameOutput extends EventRegister {
 			{ scale: 1.1 },
 			{ scale: 1 }
 		], {
-			easing: animationEasing,
-			duration: animationDuration
+			easing: this.game.config.animationEasing,
+			duration: this.game.config.animationDuration
 		}).finished
 	}
 	async #removeTile(x, y, toX, toY) {
@@ -88,8 +87,8 @@ export class GameOutput extends EventRegister {
 				{ translate: `${x * (80 + 16)}px ${y * (80 + 16)}px` },
 				{ translate: `${toX * (80 + 16)}px ${toY * (80 + 16)}px` }
 			], {
-				easing: animationEasing,
-				duration: animationDuration,
+				easing: this.game.config.animationEasing,
+				duration: this.game.config.animationDuration,
 			}).finished
 		}
 		element.remove()

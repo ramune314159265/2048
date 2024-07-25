@@ -1,4 +1,3 @@
-import { animationDuration } from '../configs.js'
 import { directions } from '../enum.js'
 import { randomFromArray } from '../util/random.js'
 import { GameInput } from './index.js'
@@ -13,6 +12,6 @@ export class RandomInput extends GameInput {
 	init() {
 		this.intervalId = setInterval(() => {
 			this.emit(randomFromArray(this.controls))
-		}, animationDuration)
+		}, this.game.config.animationDuration)
 	}
 }

@@ -1,4 +1,3 @@
-import { minimumTouchDistance } from '../configs.js'
 import { directions } from '../enum.js'
 import { GameInput } from './index.js'
 
@@ -48,7 +47,7 @@ export class KeyboardInput extends GameInput {
 			const distanceY = endY - startY
 			const absDistanceX = Math.abs(distanceX)
 			const absDistanceY = Math.abs(distanceY)
-			if (absDistanceX < minimumTouchDistance && absDistanceY < minimumTouchDistance) {
+			if (absDistanceX < this.game.config.minimumTouchDistance && absDistanceY < this.game.config.minimumTouchDistance) {
 				return
 			}
 			if (absDistanceX < absDistanceY && distanceY < 0) {

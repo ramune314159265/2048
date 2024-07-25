@@ -1,11 +1,15 @@
-import { appearTileLength, availableTiles, fieldHeight, fieldWidth, initAppearTileLength } from './configs.js'
+import { Config } from './configs.js'
 import { directions } from './enum.js'
 import { Field } from './field.js'
 import { GameOutput } from './outputs/index.js'
 import { randomFromArray } from './util/random.js'
 
 export class Game {
-	constructor(InputClass) {
+	constructor({
+		InputClass,
+		configOverrides
+	}) {
+		this.config = new Config(configOverrides)
 		this.field = new Field(this)
 		this.input = new InputClass(this)
 		this.output = new GameOutput(this)
@@ -33,7 +37,7 @@ export class Game {
 				this.appearTile()
 			}
 		})
-		this.appearTile(initAppearTileLength)
+		this.appearTile(this.config.initAppearTileLength)
 	}
 	appearTile(length) {
 		const blankTiles = []
@@ -43,13 +47,13 @@ export class Game {
 					blankTiles.push([x, y])
 			})
 		})
-		const willFilledTileLength = Math.min(blankTiles.length, length || appearTileLength)
+		const willFilledTileLength = Math.min(blankTiles.length, length || this.config.appearTileLength)
 		const targetTiles = [...Array(willFilledTileLength)].map(() => {
 			const randomStartIndex = Math.floor(Math.random() * blankTiles.length)
 			return [...blankTiles].splice(randomStartIndex, 1).at()
 		})
 		targetTiles.forEach(tile => {
-			this.field.addTile(tile[0], tile[1], randomFromArray(availableTiles))
+			this.field.addTile(tile[0], tile[1], randomFromArray(this.config.availableTiles))
 		})
 	}
 	move(direction) {
@@ -64,7 +68,7 @@ export class Game {
 		const xyConverterByDirection = (x, y) => {
 			let result = [x, y]
 			if (directionBit.at(-1) === '1') {
-				result = [fieldWidth - x - 1, fieldHeight - y - 1]
+				result = [this.config.fieldWidth - x - 1, this.config.fieldHeight - y - 1]
 			}
 			if (directionBit.at(-2) === '1') {
 				result = result.toReversed()

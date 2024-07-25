@@ -1,22 +1,21 @@
-import { fieldHeight, fieldWidth } from './configs.js'
 import { outputCommands } from './enum.js'
 
 export class Field {
 	constructor(game) {
 		this.game = game
-		this.data = [...Array(fieldHeight)].map(() => Array(fieldWidth).fill(0))
+		this.data = [...Array(this.game.config.fieldHeight)].map(() => Array(this.game.config.fieldWidth).fill(0))
 	}
 	isTileFilled(x, y) {
 		return this.getTileState(x, y) !== 0
 	}
 	getTileState(x, y) {
-		if (x < 0 || fieldWidth <= x || y < 0 || fieldHeight <= y) {
+		if (x < 0 || this.game.config.fieldWidth <= x || y < 0 || this.game.config.fieldHeight <= y) {
 			return -1
 		}
 		return this.data[y][x]
 	}
 	#setTileState(x, y, id) {
-		if (x < 0 || fieldWidth <= x || y < 0 || fieldHeight <= y) {
+		if (x < 0 || this.game.config.fieldWidth <= x || y < 0 || this.game.config.fieldHeight <= y) {
 			return
 		}
 		this.data[y][x] = id
