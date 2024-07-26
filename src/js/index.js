@@ -123,4 +123,28 @@ export class Game {
 		})
 		return moved.filter(i => i[0] !== i[2] || i[1] !== i[3])
 	}
+	isGameOver() {
+		const isAllTileFilled = this.field.data.flat().every(tile => tile !== Field.emptyState)
+		if (!isAllTileFilled) {
+			return false
+		}
+		const isAllTileMoveable = this.field.data.every((line, y) => {
+			return line.every((tile, x) => {
+				if (tile === this.field.getTileState(x, y + 1)) {
+					return false
+				}
+				if (tile === this.field.getTileState(x + 1, y)) {
+					return false
+				}
+				if (tile === this.field.getTileState(x, y - 1)) {
+					return false
+				}
+				if (tile === this.field.getTileState(x - 1, y)) {
+					return false
+				}
+				return true
+			})
+		})
+		return isAllTileMoveable
+	}
 }
