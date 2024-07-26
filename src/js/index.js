@@ -128,7 +128,7 @@ export class Game {
 		if (!isAllTileFilled) {
 			return false
 		}
-		const isAllTileMoveable = this.field.data.every((line, y) => {
+		const isAllTileImmovable = this.field.data.every((line, y) => {
 			return line.every((tile, x) => {
 				if (tile === this.field.getTileState(x, y + 1)) {
 					return false
@@ -145,6 +145,6 @@ export class Game {
 				return true
 			})
 		})
-		return isAllTileMoveable
+		return isAllTileImmovable
 	}
 }
