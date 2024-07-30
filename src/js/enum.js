@@ -11,3 +11,7 @@ export const outputCommands = Object.freeze({
 	move: Symbol('move'),
 	remove: Symbol('remove'),
 })
+
+export const gameEvents = Object.freeze({
+	gameOver: Symbol('gameOver')
+})

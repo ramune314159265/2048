@@ -1,25 +1,32 @@
 import { Config } from './configs.js'
-import { directions } from './enum.js'
+import { directions, gameEvents } from './enum.js'
 import { Field } from './field.js'
 import { GameOutput } from './outputs/index.js'
+import { EventRegister } from './util/eventRegister.js'
 import { randomFromArray } from './util/random.js'
 
-export class Game {
+export class Game extends EventRegister {
 	constructor({
 		InputClass,
 		configOverrides
 	}) {
+		super()
 		this.config = new Config(configOverrides)
-		this.field = new Field(this)
 		this.input = new InputClass(this)
-		this.output = new GameOutput(this)
+		this.init()
 		this.input.onAny(direction => {
 			const moved = this.move(direction)
 			if (moved.length !== 0) {
 				this.appearTile()
 			}
+			if (this.isGameOver()) {
+				this.emit(gameEvents.gameOver, Math.max(...this.field.data.flat()))
+			}
 		})
-
+	}
+	init() {
+		this.field = new Field(this)
+		this.output = new GameOutput(this)
 		this.appearTile(this.config.initAppearTileLength)
 	}
 	appearTile(length) {

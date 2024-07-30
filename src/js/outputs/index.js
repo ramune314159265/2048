@@ -1,4 +1,4 @@
-import { outputCommands } from '../enum.js'
+import { gameEvents, outputCommands } from '../enum.js'
 import { EventRegister } from '../util/eventRegister.js'
 
 export class GameOutput extends EventRegister {
@@ -8,6 +8,7 @@ export class GameOutput extends EventRegister {
 	constructor(game) {
 		super()
 		this.game = game
+		Array.from(document.querySelectorAll('.field')).forEach(e=>e.remove())
 		this.element = document.createElement('div')
 		this.game.field.data.forEach(line => {
 			line.forEach(() => {
@@ -24,6 +25,7 @@ export class GameOutput extends EventRegister {
 		this.on(outputCommands.move, (x, y, toX, toY) => this.#moveTile(x, y, toX, toY))
 		this.on(outputCommands.update, (x, y, state) => this.#updateTile(x, y, state))
 		this.on(outputCommands.remove, (x, y, toX, toY) => this.#removeTile(x, y, toX, toY))
+		this.game.on(gameEvents.gameOver, (max) => alert(`ゲームオーバー\n結果: ${GameOutput.toDisplayNumber(max)}`))
 	}
 	async #addTile(x, y, state) {
 		const newElement = document.createElement('div')
