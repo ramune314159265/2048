@@ -13,30 +13,13 @@ export class Game {
 		this.field = new Field(this)
 		this.input = new InputClass(this)
 		this.output = new GameOutput(this)
-		this.input.on(directions.up, () => {
-			const moved = this.move(directions.up)
+		this.input.onAny(direction => {
+			const moved = this.move(direction)
 			if (moved.length !== 0) {
 				this.appearTile()
 			}
 		})
-		this.input.on(directions.right, () => {
-			const moved = this.move(directions.right)
-			if (moved.length !== 0) {
-				this.appearTile()
-			}
-		})
-		this.input.on(directions.down, () => {
-			const moved = this.move(directions.down)
-			if (moved.length !== 0) {
-				this.appearTile()
-			}
-		})
-		this.input.on(directions.left, () => {
-			const moved = this.move(directions.left)
-			if (moved.length !== 0) {
-				this.appearTile()
-			}
-		})
+
 		this.appearTile(this.config.initAppearTileLength)
 	}
 	appearTile(length) {
