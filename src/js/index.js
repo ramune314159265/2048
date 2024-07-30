@@ -2,6 +2,7 @@ import { Config } from './configs.js'
 import { directions, gameControls, gameEvents } from './enum.js'
 import { Field } from './field.js'
 import { GameOutput } from './outputs/index.js'
+import { Record } from './record.js'
 import { EventRegister } from './util/eventRegister.js'
 import { randomFromArray } from './util/random.js'
 
@@ -12,6 +13,7 @@ export class Game extends EventRegister {
 	}) {
 		super()
 		this.config = new Config(configOverrides)
+		this.record = new Record()
 		this.input = new InputClass(this)
 		this.init()
 		this.input.onAny(direction => {
@@ -20,7 +22,9 @@ export class Game extends EventRegister {
 				this.appearTile()
 			}
 			if (this.isGameOver()) {
-				this.emit(gameEvents.gameOver, Math.max(...this.field.data.flat()))
+				const max = Math.max(...this.field.data.flat())
+				this.record.add(max)
+				this.emit(gameEvents.gameOver, max)
 			}
 		})
 		this.on(gameControls.restart, () => this.init())
