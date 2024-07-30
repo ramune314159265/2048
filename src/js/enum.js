@@ -15,3 +15,7 @@ export const outputCommands = Object.freeze({
 export const gameEvents = Object.freeze({
 	gameOver: Symbol('gameOver')
 })
+
+export const gameControls = Object.freeze({
+	restart: Symbol('restart')
+})

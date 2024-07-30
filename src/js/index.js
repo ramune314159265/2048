@@ -1,5 +1,5 @@
 import { Config } from './configs.js'
-import { directions, gameEvents } from './enum.js'
+import { directions, gameControls, gameEvents } from './enum.js'
 import { Field } from './field.js'
 import { GameOutput } from './outputs/index.js'
 import { EventRegister } from './util/eventRegister.js'
@@ -23,6 +23,7 @@ export class Game extends EventRegister {
 				this.emit(gameEvents.gameOver, Math.max(...this.field.data.flat()))
 			}
 		})
+		this.on(gameControls.restart, () => this.init())
 	}
 	init() {
 		this.field = new Field(this)
