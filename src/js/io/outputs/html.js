@@ -1,7 +1,7 @@
-import { gameControls, gameEvents, outputCommands } from '../enum.js'
-import { EventRegister } from '../util/eventRegister.js'
+import { gameControls, gameEvents, outputCommands } from '../../enum.js'
+import { GameOutput } from './index.js'
 
-export class GameOutput extends EventRegister {
+export class HtmlOutput extends GameOutput {
 	static toDisplayNumber(state) {
 		return 2 ** state
 	}
@@ -26,13 +26,13 @@ export class GameOutput extends EventRegister {
 		this.on(outputCommands.update, (x, y, state) => this.#updateTile(x, y, state))
 		this.on(outputCommands.remove, (x, y, toX, toY) => this.#removeTile(x, y, toX, toY))
 		this.game.once(gameEvents.gameOver, (max) => {
-			alert(`ゲームオーバー\n結果: ${GameOutput.toDisplayNumber(max)}`)
+			alert(`ゲームオーバー\n結果: ${HtmlOutput.toDisplayNumber(max)}`)
 			setTimeout(() => this.game.emit(gameControls.restart), 0)
 		})
 	}
 	async #addTile(x, y, state) {
 		const newElement = document.createElement('div')
-		newElement.textContent = GameOutput.toDisplayNumber(state)
+		newElement.textContent = HtmlOutput.toDisplayNumber(state)
 		newElement.classList.add('fieldTile')
 		newElement.style.translate = `${x * (80 + 16)}px ${y * (80 + 16)}px`
 		newElement.dataset.state = state
@@ -68,7 +68,7 @@ export class GameOutput extends EventRegister {
 		if (!element) {
 			return
 		}
-		element.textContent = GameOutput.toDisplayNumber(state)
+		element.textContent = HtmlOutput.toDisplayNumber(state)
 		element.dataset.state = state
 		await element.animate([
 			{ scale: 1 },

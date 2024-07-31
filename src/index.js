@@ -1,9 +1,9 @@
 import { Game } from './js/index.js'
-import { KeyboardInput } from './js/inputs/keyboard.js'
+import { orderIO } from './js/io/order.js'
 
 const run = () => {
 	const gameMain = new Game({
-		InputClass: KeyboardInput,
+		io: orderIO,
 		configOverrides: {}
 	})
 

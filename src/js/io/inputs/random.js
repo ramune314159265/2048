@@ -1,5 +1,5 @@
-import { directions } from '../enum.js'
-import { randomFromArray } from '../util/random.js'
+import { directions } from '../../enum.js'
+import { randomFromArray } from '../../util/random.js'
 import { GameInput } from './index.js'
 
 export class RandomInput extends GameInput {

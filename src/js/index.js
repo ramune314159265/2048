@@ -1,20 +1,20 @@
 import { Config } from './configs.js'
 import { directions, gameControls, gameEvents } from './enum.js'
 import { Field } from './field.js'
-import { GameOutput } from './outputs/index.js'
 import { Record } from './record.js'
 import { EventRegister } from './util/eventRegister.js'
 import { randomFromArray } from './util/random.js'
 
 export class Game extends EventRegister {
 	constructor({
-		InputClass,
+		io,
 		configOverrides
 	}) {
 		super()
+		this.io = io
 		this.config = new Config(configOverrides)
 		this.record = new Record()
-		this.input = new InputClass(this)
+		this.input = new this.io.InputClass(this)
 		this.init()
 		this.input.onAny(direction => {
 			const moved = this.move(direction)
@@ -31,7 +31,7 @@ export class Game extends EventRegister {
 	}
 	init() {
 		this.field = new Field(this)
-		this.output = new GameOutput(this)
+		this.output = new this.io.OutputClass(this)
 		this.appearTile(this.config.initAppearTileLength)
 	}
 	appearTile(length) {

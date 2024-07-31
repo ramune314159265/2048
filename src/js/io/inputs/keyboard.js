@@ -1,4 +1,4 @@
-import { directions } from '../enum.js'
+import { directions } from '../../enum.js'
 import { GameInput } from './index.js'
 
 export class KeyboardInput extends GameInput {
