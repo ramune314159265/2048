@@ -1,9 +1,9 @@
 import { Game } from './js/index.js'
-import { orderIO } from './js/io/order.js'
+import { manualIO } from './js/io/manual.js'
 
 const run = () => {
 	const gameMain = new Game({
-		io: orderIO,
+		io: manualIO,
 		configOverrides: {}
 	})
 

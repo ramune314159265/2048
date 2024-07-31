@@ -8,19 +8,30 @@ export class HtmlOutput extends GameOutput {
 	constructor(game) {
 		super()
 		this.game = game
-		Array.from(document.querySelectorAll('.field')).forEach(e => e.remove())
-		this.element = document.createElement('div')
+		Array.from(document.querySelectorAll('.gamemain')).forEach(e => e.remove())
+
+		const content = document.querySelector('#gamemainTemplate').content.cloneNode(true)
+		const gameMainElement = document.createElement('div')
+		gameMainElement.classList.add('gamemain')
+		gameMainElement.appendChild(content)
+		document.body.append(gameMainElement)
+
+		this.fieldElement = gameMainElement.querySelector('.field')
+		this.fieldElement.classList.add('field')
+		this.fieldElement.style.gridTemplateColumns = `repeat(${this.game.config.fieldWidth}, 80px)`
+		this.fieldElement.style.gridTemplateRows = `repeat(${this.game.config.fieldHeight}, 80px)`
 		this.game.field.data.forEach(line => {
 			line.forEach(() => {
 				const tile = document.createElement('div')
 				tile.classList.add('fieldTileBackground')
-				this.element.append(tile)
+				this.fieldElement.append(tile)
 			})
 		})
-		this.element.classList.add('field')
-		this.element.style.gridTemplateColumns = `repeat(${this.game.config.fieldWidth}, 80px)`
-		this.element.style.gridTemplateRows = `repeat(${this.game.config.fieldHeight}, 80px)`
-		document.body.append(this.element)
+
+		gameMainElement.querySelector('.bestScore').textContent = `最大: ${HtmlOutput.toDisplayNumber(this.game.record.bestScore)}`
+		gameMainElement.querySelector('.aveScore').textContent = `平均: ${HtmlOutput.toDisplayNumber(this.game.record.aveScore)}`
+		gameMainElement.querySelector('.reset').addEventListener('click', () => this.game.emit(gameControls.restart))
+
 		this.on(outputCommands.add, (x, y, state) => this.#addTile(x, y, state))
 		this.on(outputCommands.move, (x, y, toX, toY) => this.#moveTile(x, y, toX, toY))
 		this.on(outputCommands.update, (x, y, state) => this.#updateTile(x, y, state))
@@ -38,7 +49,7 @@ export class HtmlOutput extends GameOutput {
 		newElement.dataset.state = state
 		newElement.dataset.x = x
 		newElement.dataset.y = y
-		this.element.append(newElement)
+		this.fieldElement.append(newElement)
 		await newElement.animate([
 			{ scale: 0 },
 			{ scale: 1 }
@@ -48,7 +59,7 @@ export class HtmlOutput extends GameOutput {
 		}).finished
 	}
 	async #moveTile(x, y, toX, toY) {
-		const element = this.element.querySelector(`[data-x="${x}"][data-y="${y}"]`)
+		const element = this.fieldElement.querySelector(`[data-x="${x}"][data-y="${y}"]`)
 		if (!element) {
 			return
 		}
@@ -64,7 +75,7 @@ export class HtmlOutput extends GameOutput {
 		element.style.translate = `${toX * (80 + 16)}px ${toY * (80 + 16)}px`
 	}
 	async #updateTile(x, y, state) {
-		const element = this.element.querySelector(`[data-x="${x}"][data-y="${y}"]`)
+		const element = this.fieldElement.querySelector(`[data-x="${x}"][data-y="${y}"]`)
 		if (!element) {
 			return
 		}
@@ -80,7 +91,7 @@ export class HtmlOutput extends GameOutput {
 		}).finished
 	}
 	async #removeTile(x, y, toX, toY) {
-		const element = this.element.querySelector(`[data-x="${x}"][data-y="${y}"]`)
+		const element = this.fieldElement.querySelector(`[data-x="${x}"][data-y="${y}"]`)
 		if (!element) {
 			return
 		}

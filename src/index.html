@@ -1,12 +1,27 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>2048</title>
 	<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
+	<template id="gamemainTemplate">
+		<div class="field"></div>
+		<div class="sidebar">
+			<div class="info">
+				<span class="bestScore"></span>
+				<span class="aveScore"></span>
+			</div>
+			<div class="buttons">
+				<button class="reset">🔁 リセット</button>
+			</div>
+		</div>
+	</template>
 	<script src="index.js" type="module"></script>
 </body>
+
 </html>

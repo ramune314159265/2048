@@ -27,14 +27,42 @@ body {
 	justify-content: center;
 }
 
-.field {
-	position: relative;
+button {
 	padding: 16px;
-	display: grid;
+	background: var(--field-tile-background-color);
+	border: none;
+	border-radius: var(--border-radius);
+	cursor: pointer;
+}
+
+.gamemain {
+	display: flex;
+	padding: 16px;
 	gap: 16px;
+	flex-direction: row;
 	background: var(--field-background-color);
 	border-radius: var(--border-radius);
 	box-shadow: var(--shadow);
+}
+
+.sidebar {
+	display: flex;
+	gap: 16px;
+	flex-direction: column;
+}
+
+.info {
+	display: flex;
+	padding: 16px;
+	flex-direction: column;
+	background: var(--field-tile-background-color);
+	border-radius: var(--border-radius);
+}
+
+.field {
+	position: relative;
+	display: grid;
+	gap: 16px;
 }
 
 .fieldTileBackground {
@@ -44,8 +72,6 @@ body {
 
 .fieldTile {
 	position: absolute;
-	top: 16px;
-	left: 16px;
 	width: 80px;
 	height: 80px;
 	display: flex;
