@@ -5,7 +5,7 @@ export class OrderInput extends GameInput {
 	constructor(game) {
 		super(game)
 		this.intervalId = 0
-		this.controls = [directions.right, directions.up, directions.left]
+		this.controls = [directions.right, directions.up, directions.left, directions.down]
 		this.order = 0
 		this.init()
 	}

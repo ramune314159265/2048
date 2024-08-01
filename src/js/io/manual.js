@@ -1,7 +1,7 @@
 import { KeyboardInput } from './inputs/keyboard.js'
-import { HtmlOutput } from './outputs/html.js'
+import { HtmlWithControlOutput } from './outputs/htmlControl.js'
 
 export const manualIO = {
 	InputClass: KeyboardInput,
-	OutputClass: HtmlOutput,
+	OutputClass: HtmlWithControlOutput,
 }

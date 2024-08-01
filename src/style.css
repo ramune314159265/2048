@@ -33,6 +33,9 @@ button {
 	background: var(--field-tile-background-color);
 	border: none;
 	border-radius: var(--border-radius);
+}
+
+button:not(:disabled) {
 	cursor: pointer;
 }
 

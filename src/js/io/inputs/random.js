@@ -6,7 +6,7 @@ export class RandomInput extends GameInput {
 	constructor(game) {
 		super(game)
 		this.intervalId = 0
-		this.controls = [directions.up, directions.right, directions.left]
+		this.controls = [directions.up, directions.right, directions.left, directions.down]
 		this.init()
 	}
 	init() {

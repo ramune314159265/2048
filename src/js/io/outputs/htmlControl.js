@@ -1,7 +1,7 @@
 import { gameControls, gameEvents, outputCommands } from '../../enum.js'
 import { GameOutput } from './index.js'
 
-export class HtmlOutput extends GameOutput {
+export class HtmlWithControlOutput extends GameOutput {
 	static toDisplayNumber(state) {
 		return 2 ** state
 	}
@@ -21,13 +21,14 @@ export class HtmlOutput extends GameOutput {
 		this.fieldElement.style.gridTemplateColumns = `repeat(${this.game.config.fieldWidth}, 80px)`
 		this.fieldElement.style.gridTemplateRows = `repeat(${this.game.config.fieldHeight}, 80px)`
 
-		this.mainElement.querySelector('.reset').disabled = true
+		this.mainElement.querySelector('.reset').addEventListener('click', () => this.game.emit(gameControls.restart))
 
 		this.on(outputCommands.add, (x, y, state) => this.#addTile(x, y, state))
 		this.on(outputCommands.move, (x, y, toX, toY) => this.#moveTile(x, y, toX, toY))
 		this.on(outputCommands.update, (x, y, state) => this.#updateTile(x, y, state))
 		this.on(outputCommands.remove, (x, y, toX, toY) => this.#removeTile(x, y, toX, toY))
-		this.game.on(gameEvents.gameOver, () => {
+		this.game.on(gameEvents.gameOver, (max) => {
+			alert(`ゲームオーバー\n結果: ${HtmlWithControlOutput.toDisplayNumber(max)}`)
 			setTimeout(() => this.game.emit(gameControls.restart), 0)
 		})
 	}
@@ -42,12 +43,12 @@ export class HtmlOutput extends GameOutput {
 				this.fieldElement.append(tile)
 			})
 		})
-		this.mainElement.querySelector('.bestScore').textContent = `最大: ${HtmlOutput.toDisplayNumber(this.game.record.bestScore)}`
-		this.mainElement.querySelector('.averageScore').textContent = `平均: ${Math.floor(HtmlOutput.toDisplayNumber(this.game.record.averageScore) * 10) / 10}`
+		this.mainElement.querySelector('.bestScore').textContent = `最大: ${HtmlWithControlOutput.toDisplayNumber(this.game.record.bestScore)}`
+		this.mainElement.querySelector('.averageScore').textContent = `平均: ${Math.floor(HtmlWithControlOutput.toDisplayNumber(this.game.record.averageScore) * 10) / 10}`
 	}
 	async #addTile(x, y, state) {
 		const newElement = document.createElement('div')
-		newElement.textContent = HtmlOutput.toDisplayNumber(state)
+		newElement.textContent = HtmlWithControlOutput.toDisplayNumber(state)
 		newElement.classList.add('fieldTile')
 		newElement.style.translate = `${x * (80 + 16)}px ${y * (80 + 16)}px`
 		newElement.dataset.state = state
@@ -83,7 +84,7 @@ export class HtmlOutput extends GameOutput {
 		if (!element) {
 			return
 		}
-		element.textContent = HtmlOutput.toDisplayNumber(state)
+		element.textContent = HtmlWithControlOutput.toDisplayNumber(state)
 		element.dataset.state = state
 		await element.animate([
 			{ scale: 1 },
