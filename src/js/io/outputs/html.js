@@ -11,15 +11,31 @@ export class HtmlOutput extends GameOutput {
 		Array.from(document.querySelectorAll('.gamemain')).forEach(e => e.remove())
 
 		const content = document.querySelector('#gamemainTemplate').content.cloneNode(true)
-		const gameMainElement = document.createElement('div')
-		gameMainElement.classList.add('gamemain')
-		gameMainElement.appendChild(content)
-		document.body.append(gameMainElement)
+		this.mainElement = document.createElement('div')
+		this.mainElement.classList.add('gamemain')
+		this.mainElement.appendChild(content)
+		document.body.append(this.mainElement)
 
-		this.fieldElement = gameMainElement.querySelector('.field')
+		this.fieldElement = this.mainElement.querySelector('.field')
 		this.fieldElement.classList.add('field')
 		this.fieldElement.style.gridTemplateColumns = `repeat(${this.game.config.fieldWidth}, 80px)`
 		this.fieldElement.style.gridTemplateRows = `repeat(${this.game.config.fieldHeight}, 80px)`
+
+		this.mainElement.querySelector('.reset').addEventListener('click', () => this.game.emit(gameControls.restart))
+
+		this.on(outputCommands.add, (x, y, state) => this.#addTile(x, y, state))
+		this.on(outputCommands.move, (x, y, toX, toY) => this.#moveTile(x, y, toX, toY))
+		this.on(outputCommands.update, (x, y, state) => this.#updateTile(x, y, state))
+		this.on(outputCommands.remove, (x, y, toX, toY) => this.#removeTile(x, y, toX, toY))
+		this.game.on(gameEvents.gameOver, (max) => {
+			alert(`ゲームオーバー\n結果: ${HtmlOutput.toDisplayNumber(max)}`)
+			setTimeout(() => this.game.emit(gameControls.restart), 0)
+		})
+	}
+	init() {
+		while (this.fieldElement.firstChild) {
+			this.fieldElement.firstChild.remove()
+		}
 		this.game.field.data.forEach(line => {
 			line.forEach(() => {
 				const tile = document.createElement('div')
@@ -27,19 +43,8 @@ export class HtmlOutput extends GameOutput {
 				this.fieldElement.append(tile)
 			})
 		})
-
-		gameMainElement.querySelector('.bestScore').textContent = `最大: ${HtmlOutput.toDisplayNumber(this.game.record.bestScore)}`
-		gameMainElement.querySelector('.averageScore').textContent = `平均: ${Math.floor(HtmlOutput.toDisplayNumber(this.game.record.averageScore) * 10) / 10}`
-		gameMainElement.querySelector('.reset').addEventListener('click', () => this.game.emit(gameControls.restart))
-
-		this.on(outputCommands.add, (x, y, state) => this.#addTile(x, y, state))
-		this.on(outputCommands.move, (x, y, toX, toY) => this.#moveTile(x, y, toX, toY))
-		this.on(outputCommands.update, (x, y, state) => this.#updateTile(x, y, state))
-		this.on(outputCommands.remove, (x, y, toX, toY) => this.#removeTile(x, y, toX, toY))
-		this.game.once(gameEvents.gameOver, (max) => {
-			alert(`ゲームオーバー\n結果: ${HtmlOutput.toDisplayNumber(max)}`)
-			setTimeout(() => this.game.emit(gameControls.restart), 0)
-		})
+		this.mainElement.querySelector('.bestScore').textContent = `最大: ${HtmlOutput.toDisplayNumber(this.game.record.bestScore)}`
+		this.mainElement.querySelector('.averageScore').textContent = `平均: ${Math.floor(HtmlOutput.toDisplayNumber(this.game.record.averageScore) * 10) / 10}`
 	}
 	async #addTile(x, y, state) {
 		const newElement = document.createElement('div')

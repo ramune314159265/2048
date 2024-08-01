@@ -15,6 +15,7 @@ export class Game extends EventRegister {
 		this.config = new Config(configOverrides)
 		this.record = new Record()
 		this.input = new this.io.InputClass(this)
+		this.output = new this.io.OutputClass(this)
 		this.init()
 		this.input.onAny(direction => {
 			const moved = this.move(direction)
@@ -31,7 +32,7 @@ export class Game extends EventRegister {
 	}
 	init() {
 		this.field = new Field(this)
-		this.output = new this.io.OutputClass(this)
+		this.output.init()
 		this.appearTile(this.config.initAppearTileLength)
 	}
 	appearTile(length) {
