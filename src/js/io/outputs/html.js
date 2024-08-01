@@ -29,7 +29,7 @@ export class HtmlOutput extends GameOutput {
 		})
 
 		gameMainElement.querySelector('.bestScore').textContent = `最大: ${HtmlOutput.toDisplayNumber(this.game.record.bestScore)}`
-		gameMainElement.querySelector('.aveScore').textContent = `平均: ${HtmlOutput.toDisplayNumber(this.game.record.aveScore)}`
+		gameMainElement.querySelector('.averageScore').textContent = `平均: ${Math.floor(HtmlOutput.toDisplayNumber(this.game.record.averageScore) * 10) / 10}`
 		gameMainElement.querySelector('.reset').addEventListener('click', () => this.game.emit(gameControls.restart))
 
 		this.on(outputCommands.add, (x, y, state) => this.#addTile(x, y, state))
