@@ -1,4 +1,5 @@
 import { gameControls, gameEvents, outputCommands } from '../../enum.js'
+import html2canvas from '../../libraries/html2canvas.js'
 import { GameOutput } from './index.js'
 
 export class HtmlWithControlOutput extends GameOutput {
@@ -22,6 +23,14 @@ export class HtmlWithControlOutput extends GameOutput {
 		this.fieldElement.style.gridTemplateRows = `repeat(${this.game.config.fieldHeight}, 80px)`
 
 		this.mainElement.querySelector('.reset').addEventListener('click', () => this.game.emit(gameControls.restart))
+		this.mainElement.querySelector('.screenshot').addEventListener('click', async () => {
+			const imageCanvas = await html2canvas(this.fieldElement)
+			const imageUrl = imageCanvas.toDataURL("image/png")
+			const newWindow = window.open("about:blank", Math.random())
+			const imageElement = newWindow.document.createElement('img')
+			imageElement.src = imageUrl
+			newWindow.document.body.appendChild(imageElement)
+		})
 
 		this.on(outputCommands.add, (x, y, state) => this.#addTile(x, y, state))
 		this.on(outputCommands.move, (x, y, toX, toY) => this.#moveTile(x, y, toX, toY))

@@ -63,6 +63,12 @@ button:not(:disabled) {
 	border-radius: var(--border-radius);
 }
 
+.buttons {
+    display: flex;
+    flex-direction: column;
+    gap: var(--padding);
+}
+
 .buttons>button {
 	width: 100%;
 }

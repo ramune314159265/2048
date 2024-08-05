@@ -7,6 +7,7 @@ export default [
 		languageOptions: {
 			globals: globals.browser
 		},
+		ignores: ["src/js/libraries/*"],
 		rules: {
 			"semi": [
 				"error",
