@@ -19,6 +19,6 @@ export class Config {
 		this.appearTileLength = appearTileLength ?? 1
 		this.initAppearTileLength = initAppearTileLength ?? 2
 
-		this.minimumTouchDistance = minimumTouchDistance ?? 50
+		this.minimumTouchDistance = minimumTouchDistance ?? 80
 	}
 }

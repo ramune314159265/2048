@@ -11,7 +11,7 @@ const run = () => {
 		console.log(gameMain)
 	})
 
-	document.addEventListener('touchstart', e => e.preventDefault(), { passive: false })
+	document.addEventListener('touchmove', e => e.preventDefault(), { passive: false })
 }
 
 run()
