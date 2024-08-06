@@ -10,8 +10,6 @@ const run = () => {
 	document.body.addEventListener('click', () => {
 		console.log(gameMain)
 	})
-
-	document.addEventListener('touchmove', e => e.preventDefault(), { passive: false })
 }
 
 run()
