@@ -30,46 +30,48 @@ export class KeyboardInput extends GameInput {
 					break
 			}
 		}
-		let startX = 0
-		let startY = 0
-		let endX = 0
-		let endY = 0
 		this.touchStartHandler = e => {
-			startX = e.touches[0].pageX
-			startY = e.touches[0].pageY
-		}
-		this.touchMoveHandler = e => {
-			endX = e.changedTouches[0].pageX
-			endY = e.changedTouches[0].pageY
-		}
-		this.touchEndHandler = () => {
-			const distanceX = endX - startX
-			const distanceY = endY - startY
-			const absDistanceX = Math.abs(distanceX)
-			const absDistanceY = Math.abs(distanceY)
-			if (absDistanceX < this.game.config.minimumTouchDistance && absDistanceY < this.game.config.minimumTouchDistance) {
-				return
+			let startX = e.touches[0].pageX
+			let startY = e.touches[0].pageY
+			let endX = 0
+			let endY = 0
+			const touchMoveHandler = e => {
+				endX = e.changedTouches[0].pageX
+				endY = e.changedTouches[0].pageY
 			}
-			if (absDistanceX < absDistanceY && distanceY < 0) {
-				this.emit(directions.up)
-				return
-			}
-			if (absDistanceY < absDistanceX && 0 < distanceX) {
-				this.emit(directions.right)
-				return
-			}
-			if (absDistanceX < absDistanceY && 0 < distanceY) {
-				this.emit(directions.down)
-				return
-			}
-			if (absDistanceY < absDistanceX && distanceX < 0) {
-				this.emit(directions.left)
-				return
-			}
+			document.addEventListener('touchmove', touchMoveHandler, { passive: true })
+			document.addEventListener('touchend', () => {
+				const distanceX = endX - startX
+				const distanceY = endY - startY
+				const absDistanceX = Math.abs(distanceX)
+				const absDistanceY = Math.abs(distanceY)
+				if (absDistanceX < this.game.config.minimumTouchDistance && absDistanceY < this.game.config.minimumTouchDistance) {
+					return
+				}
+				if (absDistanceX < absDistanceY && distanceY < 0) {
+					this.emit(directions.up)
+					return
+				}
+				if (absDistanceY < absDistanceX && 0 < distanceX) {
+					this.emit(directions.right)
+					return
+				}
+				if (absDistanceX < absDistanceY && 0 < distanceY) {
+					this.emit(directions.down)
+					return
+				}
+				if (absDistanceY < absDistanceX && distanceX < 0) {
+					this.emit(directions.left)
+					return
+				}
+				document.removeEventListener('touchmove', touchMoveHandler, { passive: true })
+			}, {
+				passive: true,
+				once: true
+			})
 		}
 		document.addEventListener('keydown', this.keyDownHandler)
 		document.addEventListener('touchstart', this.touchStartHandler)
-		document.addEventListener('touchmove', this.touchMoveHandler, { passive: true })
-		document.addEventListener('touchend', this.touchEndHandler, { passive: true })
+
 	}
 }
