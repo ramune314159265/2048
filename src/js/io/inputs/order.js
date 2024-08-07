@@ -1,9 +1,9 @@
-import { directions } from '../../enum.js'
+import { directions, gameControls, gameEvents } from '../../enum.js'
 import { GameInput } from './index.js'
 
 export class OrderInput extends GameInput {
-	constructor(game) {
-		super(game)
+	constructor(io, game) {
+		super(io, game)
 		this.intervalId = 0
 		this.controls = [directions.right, directions.up, directions.left, directions.down]
 		this.order = 0
@@ -17,5 +17,9 @@ export class OrderInput extends GameInput {
 				this.order = 0
 			}
 		}, this.game.config.animationDuration)
+
+		this.game.on(gameEvents.gameOver, () => {
+			setTimeout(() => this.game.emit(gameControls.restart), 0)
+		})
 	}
 }

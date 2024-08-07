@@ -1,10 +1,10 @@
-import { directions } from '../../enum.js'
+import { directions, gameControls, gameEvents } from '../../enum.js'
 import { randomFromArray } from '../../util/random.js'
 import { GameInput } from './index.js'
 
 export class RandomInput extends GameInput {
-	constructor(game) {
-		super(game)
+	constructor(io, game) {
+		super(io, game)
 		this.intervalId = 0
 		this.controls = [directions.up, directions.right, directions.left, directions.down]
 		this.init()
@@ -13,5 +13,9 @@ export class RandomInput extends GameInput {
 		this.intervalId = setInterval(() => {
 			this.emit(randomFromArray(this.controls))
 		}, this.game.config.animationDuration)
+
+		this.game.on(gameEvents.gameOver, () => {
+			setTimeout(() => this.game.emit(gameControls.restart), 0)
+		})
 	}
 }

@@ -1,9 +1,10 @@
-import { directions } from '../../enum.js'
+import { directions, gameControls, gameEvents } from '../../enum.js'
+import { HtmlOutput } from '../outputs/html.js'
 import { GameInput } from './index.js'
 
 export class KeyboardInput extends GameInput {
-	constructor(game) {
-		super(game)
+	constructor(io, game) {
+		super(io, game)
 		this.keyDownHandler = () => { }
 		this.touchStartHandler = () => { }
 		this.touchMoveHandler = () => { }
@@ -78,5 +79,9 @@ export class KeyboardInput extends GameInput {
 		document.addEventListener('keydown', this.keyDownHandler)
 		document.addEventListener('touchstart', this.touchStartHandler, { passive: false })
 
+		this.game.on(gameEvents.gameOver, (max) => {
+			alert(`ゲームオーバー\n結果: ${HtmlOutput.toDisplayNumber(max)}`)
+			setTimeout(() => this.game.emit(gameControls.restart), 0)
+		})
 	}
 }

@@ -1,23 +1,22 @@
 import { Config } from './configs.js'
 import { directions, gameControls, gameEvents } from './enum.js'
 import { Field } from './field.js'
+import html2canvas from './libraries/html2canvas.js'
 import { Record } from './record.js'
 import { EventRegister } from './util/eventRegister.js'
 import { randomFromArray } from './util/random.js'
 
 export class Game extends EventRegister {
 	constructor({
-		io,
+		IOClass,
 		configOverrides
 	}) {
 		super()
-		this.io = io
 		this.config = new Config(configOverrides)
 		this.record = new Record()
-		this.input = new this.io.InputClass(this)
-		this.output = new this.io.OutputClass(this)
+		this.io = new IOClass(this)
 		this.init()
-		this.input.onAny(direction => {
+		this.io.input.onAny(direction => {
 			const moved = this.move(direction)
 			if (moved.length !== 0) {
 				this.appearTile()
@@ -32,7 +31,7 @@ export class Game extends EventRegister {
 	}
 	init() {
 		this.field = new Field(this)
-		this.output.init()
+		this.io.output.init()
 		this.appearTile(this.config.initAppearTileLength)
 	}
 	appearTile(length) {
@@ -142,5 +141,13 @@ export class Game extends EventRegister {
 			})
 		})
 		return isAllTileImmovable
+	}
+	async screenshot(){
+		const imageCanvas = await html2canvas(this.io.output.fieldElement)
+		const imageUrl = imageCanvas.toDataURL("image/png")
+		const newWindow = window.open("about:blank", Math.random())
+		const imageElement = newWindow.document.createElement('img')
+		imageElement.src = imageUrl
+		newWindow.document.body.appendChild(imageElement)
 	}
 }
