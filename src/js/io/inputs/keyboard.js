@@ -32,11 +32,10 @@ export class KeyboardInput extends GameInput {
 			}
 		}
 		this.touchStartHandler = e => {
-			e.preventDefault()
 			if (e.target.tagName === 'BUTTON') {
-				e.target.click()
 				return
 			}
+			e.preventDefault()
 			let startX = e.touches[0].pageX
 			let startY = e.touches[0].pageY
 			let endX = 0
