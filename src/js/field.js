@@ -2,21 +2,21 @@ import { directions, outputCommands } from './enum.js'
 
 export class Field {
 	static emptyState = 0
-	constructor(game) {
-		this.game = game
-		this.data = [...Array(this.game.config.fieldHeight)].map(() => Array(this.game.config.fieldWidth).fill(Field.emptyState))
+	constructor(session) {
+		this.session = session
+		this.data = [...Array(this.session.config.fieldHeight)].map(() => Array(this.session.config.fieldWidth).fill(Field.emptyState))
 	}
 	isTileFilled(x, y) {
 		return this.getTileState(x, y) !== Field.emptyState
 	}
 	getTileState(x, y) {
-		if (x < 0 || this.game.config.fieldWidth <= x || y < 0 || this.game.config.fieldHeight <= y) {
+		if (x < 0 || this.session.config.fieldWidth <= x || y < 0 || this.session.config.fieldHeight <= y) {
 			return -1
 		}
 		return this.data[y][x]
 	}
 	#setTileState(x, y, id) {
-		if (x < 0 || this.game.config.fieldWidth <= x || y < 0 || this.game.config.fieldHeight <= y) {
+		if (x < 0 || this.session.config.fieldWidth <= x || y < 0 || this.session.config.fieldHeight <= y) {
 			return
 		}
 		this.data[y][x] = id
@@ -26,7 +26,7 @@ export class Field {
 			return
 		}
 		this.#setTileState(x, y, state)
-		this.game.io.output.emit(outputCommands.add,x,y,state)
+		this.session.game.io.output.emit(outputCommands.add,x,y,state)
 	}
 	moveTile(x, y, toX, toY) {
 		if (!this.isTileFilled(x, y) && this.isTileFilled(toX, toY)) {
@@ -35,7 +35,7 @@ export class Field {
 		const originTileState = this.getTileState(x, y)
 		this.#setTileState(x, y, Field.emptyState)
 		this.#setTileState(toX, toY, originTileState)
-		this.game.io.output.emit(outputCommands.move,x, y, toX, toY)
+		this.session.game.io.output.emit(outputCommands.move,x, y, toX, toY)
 	}
 	mergeTile(x, y, targetX, targetY) {
 		if (!this.isTileFilled(x, y) && !this.isTileFilled(targetX, targetY)) {
@@ -47,8 +47,8 @@ export class Field {
 		this.#setTileState(targetX, targetY, this.getTileState(targetX, targetY) + 1)
 		this.#setTileState(x, y, Field.emptyState)
 
-		this.game.io.output.emit(outputCommands.update,targetX, targetY, this.getTileState(targetX, targetY))
-		this.game.io.output.emit(outputCommands.remove,x, y, targetX, targetY)
+		this.session.game.io.output.emit(outputCommands.update,targetX, targetY, this.getTileState(targetX, targetY))
+		this.session.game.io.output.emit(outputCommands.remove,x, y, targetX, targetY)
 	}
 	move(direction) {
 		const moved = []
@@ -62,7 +62,7 @@ export class Field {
 		const xyConverterByDirection = (x, y) => {
 			let result = [x, y]
 			if (directionBit.at(-1) === '1') {
-				result = [this.game.config.fieldWidth - x - 1, this.game.config.fieldHeight - y - 1]
+				result = [this.session.config.fieldWidth - x - 1, this.session.config.fieldHeight - y - 1]
 			}
 			if (directionBit.at(-2) === '1') {
 				result = result.toReversed()

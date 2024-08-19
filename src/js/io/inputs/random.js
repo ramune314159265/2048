@@ -12,9 +12,9 @@ export class RandomInput extends GameInput {
 	init() {
 		this.intervalId = setInterval(() => {
 			this.emit(randomFromArray(this.controls))
-		}, this.game.config.animationDuration)
+		}, this.game.session.config.animationDuration)
 
-		this.game.on(gameEvents.gameOver, () => {
+		this.game.session.on(gameEvents.gameOver, () => {
 			setTimeout(() => this.game.emit(gameControls.restart), 0)
 		})
 	}

@@ -13,7 +13,8 @@ export const outputCommands = Object.freeze({
 })
 
 export const gameEvents = Object.freeze({
-	gameOver: Symbol('gameOver')
+	gameOver: Symbol('gameOver'),
+	sessionInit: Symbol('sessionInit')
 })
 
 export const gameControls = Object.freeze({

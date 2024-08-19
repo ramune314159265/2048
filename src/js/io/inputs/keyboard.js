@@ -50,7 +50,7 @@ export class KeyboardInput extends GameInput {
 				const distanceY = endY - startY
 				const absDistanceX = Math.abs(distanceX)
 				const absDistanceY = Math.abs(distanceY)
-				if (absDistanceX < this.game.config.minimumTouchDistance && absDistanceY < this.game.config.minimumTouchDistance) {
+				if (absDistanceX < this.game.session.config.minimumTouchDistance && absDistanceY < this.game.session.config.minimumTouchDistance) {
 					return
 				}
 				if (absDistanceX < absDistanceY && distanceY < 0) {
@@ -78,9 +78,11 @@ export class KeyboardInput extends GameInput {
 		document.addEventListener('keydown', this.keyDownHandler)
 		document.addEventListener('touchstart', this.touchStartHandler, { passive: false })
 
-		this.game.on(gameEvents.gameOver, (max) => {
-			alert(`ゲームオーバー\n結果: ${HtmlOutput.toDisplayNumber(max)}`)
-			setTimeout(() => this.game.emit(gameControls.restart), 0)
+		this.io.once(gameEvents.sessionInit, () => {
+			this.game.session.on(gameEvents.gameOver, (max) => {
+				alert(`ゲームオーバー\n結果: ${HtmlOutput.toDisplayNumber(max)}`)
+				setTimeout(() => this.game.emit(gameControls.restart), 0)
+			})
 		})
 	}
 }

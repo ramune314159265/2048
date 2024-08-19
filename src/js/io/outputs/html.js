@@ -1,4 +1,4 @@
-import { outputCommands } from '../../enum.js'
+import { gameEvents, outputCommands } from '../../enum.js'
 import { GameOutput } from './index.js'
 
 export class HtmlOutput extends GameOutput {
@@ -11,19 +11,20 @@ export class HtmlOutput extends GameOutput {
 
 		this.fieldElement = io.mainElement.querySelector('.field')
 		this.fieldElement.classList.add('field')
-		this.fieldElement.style.gridTemplateColumns = `repeat(${this.game.config.fieldWidth}, 80px)`
-		this.fieldElement.style.gridTemplateRows = `repeat(${this.game.config.fieldHeight}, 80px)`
 
+		this.on(gameEvents.sessionInit, () => this.init())
 		this.on(outputCommands.add, (x, y, state) => this.#addTile(x, y, state))
 		this.on(outputCommands.move, (x, y, toX, toY) => this.#moveTile(x, y, toX, toY))
 		this.on(outputCommands.update, (x, y, state) => this.#updateTile(x, y, state))
 		this.on(outputCommands.remove, (x, y, toX, toY) => this.#removeTile(x, y, toX, toY))
 	}
 	init() {
+		this.fieldElement.style.gridTemplateColumns = `repeat(${this.game.session.config.fieldWidth}, 80px)`
+		this.fieldElement.style.gridTemplateRows = `repeat(${this.game.session.config.fieldHeight}, 80px)`
 		while (this.fieldElement.firstChild) {
 			this.fieldElement.firstChild.remove()
 		}
-		this.game.field.data.forEach(line => {
+		this.game.session.field.data.forEach(line => {
 			line.forEach(() => {
 				const tile = document.createElement('div')
 				tile.classList.add('fieldTileBackground')
@@ -46,8 +47,8 @@ export class HtmlOutput extends GameOutput {
 			{ scale: 0 },
 			{ scale: 1 }
 		], {
-			easing: this.game.config.animationEasing,
-			duration: this.game.config.animationDuration
+			easing: this.game.session.config.animationEasing,
+			duration: this.game.session.config.animationDuration
 		}).finished
 	}
 	async #moveTile(x, y, toX, toY) {
@@ -61,8 +62,8 @@ export class HtmlOutput extends GameOutput {
 			{ translate: `${x * (80 + 16)}px ${y * (80 + 16)}px` },
 			{ translate: `${toX * (80 + 16)}px ${toY * (80 + 16)}px` }
 		], {
-			easing: this.game.config.animationEasing,
-			duration: this.game.config.animationDuration,
+			easing: this.game.session.config.animationEasing,
+			duration: this.game.session.config.animationDuration,
 		}).finished
 		element.style.translate = `${toX * (80 + 16)}px ${toY * (80 + 16)}px`
 	}
@@ -78,8 +79,8 @@ export class HtmlOutput extends GameOutput {
 			{ scale: 1.1 },
 			{ scale: 1 }
 		], {
-			easing: this.game.config.animationEasing,
-			duration: this.game.config.animationDuration
+			easing: this.game.session.config.animationEasing,
+			duration: this.game.session.config.animationDuration
 		}).finished
 	}
 	async #removeTile(x, y, toX, toY) {
@@ -95,8 +96,8 @@ export class HtmlOutput extends GameOutput {
 				{ translate: `${x * (80 + 16)}px ${y * (80 + 16)}px` },
 				{ translate: `${toX * (80 + 16)}px ${toY * (80 + 16)}px` }
 			], {
-				easing: this.game.config.animationEasing,
-				duration: this.game.config.animationDuration,
+				easing: this.game.session.config.animationEasing,
+				duration: this.game.session.config.animationDuration,
 			}).finished
 		}
 		element.remove()

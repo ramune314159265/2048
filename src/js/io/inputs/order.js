@@ -16,9 +16,9 @@ export class OrderInput extends GameInput {
 			if (this.controls.length <= this.order) {
 				this.order = 0
 			}
-		}, this.game.config.animationDuration)
+		}, this.game.session.config.animationDuration)
 
-		this.game.on(gameEvents.gameOver, () => {
+		this.game.session.on(gameEvents.gameOver, () => {
 			setTimeout(() => this.game.emit(gameControls.restart), 0)
 		})
 	}
