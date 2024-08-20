@@ -78,8 +78,8 @@ export class KeyboardInput extends GameInput {
 		document.addEventListener('keydown', this.keyDownHandler)
 		document.addEventListener('touchstart', this.touchStartHandler, { passive: false })
 
-		this.io.once(gameEvents.sessionInit, () => {
-			this.game.session.on(gameEvents.gameOver, (max) => {
+		this.io.on(gameEvents.sessionInit, () => {
+			this.game.session.once(gameEvents.gameOver, (max) => {
 				alert(`ゲームオーバー\n結果: ${HtmlOutput.toDisplayNumber(max)}`)
 				setTimeout(() => this.game.emit(gameControls.restart), 0)
 			})
