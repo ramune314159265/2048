@@ -29,10 +29,12 @@ export class Game extends EventRegister {
 		})
 	}
 	newSession({
-		configOverrides
+		configOverrides,
+		randomSeed
 	}) {
 		this.session = new Session({
 			configOverrides,
+			randomSeed,
 			game: this
 		})
 		this.io.emit(gameEvents.sessionInit)

@@ -1,17 +1,20 @@
 import { Config } from './configs.js'
 import { Field } from './field.js'
 import { EventRegister } from './util/eventRegister.js'
-import { randomFromArray } from './util/random.js'
+import { Random, randomInteger } from './util/random.js'
 
-export class Session extends EventRegister{
+export class Session extends EventRegister {
 	constructor({
 		configOverrides,
-		game
+		game,
+		randomSeed
 	}) {
 		super()
 		this.game = game
 		this.config = new Config(configOverrides)
 		this.field = new Field(this)
+		this.random = new Random(randomSeed ?? randomInteger(100_000_000))
+		console.log(randomSeed, this.random.w)
 	}
 	appearTile(length) {
 		const blankTiles = []
@@ -23,11 +26,11 @@ export class Session extends EventRegister{
 		})
 		const willFilledTileLength = Math.min(blankTiles.length, length || this.config.appearTileLength)
 		const targetTiles = [...Array(willFilledTileLength)].map(() => {
-			const randomStartIndex = Math.floor(Math.random() * blankTiles.length)
+			const randomStartIndex = this.random.generate(0, blankTiles.length - 1)
 			return [...blankTiles].splice(randomStartIndex, 1).at()
 		})
 		targetTiles.forEach(tile => {
-			this.field.addTile(tile[0], tile[1], randomFromArray(this.config.availableTiles))
+			this.field.addTile(tile[0], tile[1], this.config.availableTiles[this.random.generate(0, this.config.availableTiles.length - 1)])
 		})
 	}
 	isGameOver() {
