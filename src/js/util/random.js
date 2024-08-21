@@ -14,6 +14,7 @@ export class Random {
 		this.w = seed
 	}
 	generate(min, max) {
+		console.log('1')
 		let t = this.x ^ (this.x << 11)
 		this.x = this.y
 		this.y = this.z

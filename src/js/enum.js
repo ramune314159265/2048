@@ -10,13 +10,14 @@ export const outputCommands = Object.freeze({
 	update: Symbol('update'),
 	move: Symbol('move'),
 	remove: Symbol('remove'),
+	bulkSet: Symbol('bulkSet'),
 })
 
 export const gameEvents = Object.freeze({
 	gameOver: Symbol('gameOver'),
-	sessionInit: Symbol('sessionInit')
+	sessionInit: Symbol('sessionInit'),
 })
 
 export const gameControls = Object.freeze({
-	restart: Symbol('restart')
+	restart: Symbol('restart'),
 })

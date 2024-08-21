@@ -26,7 +26,7 @@ export class Field {
 			return
 		}
 		this.#setTileState(x, y, state)
-		this.session.game.io.output.emit(outputCommands.add,x,y,state)
+		this.session.game.io.output.emit(outputCommands.add, x, y, state)
 	}
 	moveTile(x, y, toX, toY) {
 		if (!this.isTileFilled(x, y) && this.isTileFilled(toX, toY)) {
@@ -35,7 +35,7 @@ export class Field {
 		const originTileState = this.getTileState(x, y)
 		this.#setTileState(x, y, Field.emptyState)
 		this.#setTileState(toX, toY, originTileState)
-		this.session.game.io.output.emit(outputCommands.move,x, y, toX, toY)
+		this.session.game.io.output.emit(outputCommands.move, x, y, toX, toY)
 	}
 	mergeTile(x, y, targetX, targetY) {
 		if (!this.isTileFilled(x, y) && !this.isTileFilled(targetX, targetY)) {
@@ -47,8 +47,12 @@ export class Field {
 		this.#setTileState(targetX, targetY, this.getTileState(targetX, targetY) + 1)
 		this.#setTileState(x, y, Field.emptyState)
 
-		this.session.game.io.output.emit(outputCommands.update,targetX, targetY, this.getTileState(targetX, targetY))
-		this.session.game.io.output.emit(outputCommands.remove,x, y, targetX, targetY)
+		this.session.game.io.output.emit(outputCommands.update, targetX, targetY, this.getTileState(targetX, targetY))
+		this.session.game.io.output.emit(outputCommands.remove, x, y, targetX, targetY)
+	}
+	bulkSet(data) {
+		this.data = data
+		this.session.game.io.output.emit(outputCommands.bulkSet, data)
 	}
 	move(direction) {
 		const moved = []

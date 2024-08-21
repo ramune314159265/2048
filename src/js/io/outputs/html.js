@@ -1,4 +1,5 @@
 import { gameEvents, outputCommands } from '../../enum.js'
+import { Field } from '../../field.js'
 import { GameOutput } from './index.js'
 
 export class HtmlOutput extends GameOutput {
@@ -17,6 +18,7 @@ export class HtmlOutput extends GameOutput {
 		this.on(outputCommands.move, (x, y, toX, toY) => this.#moveTile(x, y, toX, toY))
 		this.on(outputCommands.update, (x, y, state) => this.#updateTile(x, y, state))
 		this.on(outputCommands.remove, (x, y, toX, toY) => this.#removeTile(x, y, toX, toY))
+		this.on(outputCommands.bulkSet, (data) => this.bulkSet(data))
 	}
 	init() {
 		this.fieldElement.style.gridTemplateColumns = `repeat(${this.game.session.config.fieldWidth}, 80px)`
@@ -101,5 +103,16 @@ export class HtmlOutput extends GameOutput {
 			}).finished
 		}
 		element.remove()
+	}
+	bulkSet(data) {
+		this.init()
+		data.forEach((line, y) => {
+			line.forEach((tile, x) => {
+				if (tile === Field.emptyState) {
+					return
+				}
+				this.#addTile(x, y, tile)
+			})
+		})
 	}
 }
