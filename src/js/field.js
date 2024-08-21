@@ -117,4 +117,21 @@ export class Field {
 		})
 		return moved.filter(i => i[0] !== i[2] || i[1] !== i[3])
 	}
+	appearTile(length) {
+		const blankTiles = []
+		this.data.forEach((line, y) => {
+			line.forEach((_, x) => {
+				if (!this.isTileFilled(x, y))
+					blankTiles.push([x, y])
+			})
+		})
+		const willFilledTileLength = Math.min(blankTiles.length, length || this.session.config.appearTileLength)
+		const targetTiles = [...Array(willFilledTileLength)].map(() => {
+			const randomStartIndex = this.session.random.generate(0, blankTiles.length - 1)
+			return [...blankTiles].splice(randomStartIndex, 1).at()
+		})
+		targetTiles.forEach(tile => {
+			this.addTile(tile[0], tile[1], this.session.config.availableTiles[this.session.random.generate(0, this.session.config.availableTiles.length - 1)])
+		})
+	}
 }

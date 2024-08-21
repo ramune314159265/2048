@@ -1,4 +1,4 @@
-import { gameControls, gameEvents } from './enum.js'
+import { gameControls } from './enum.js'
 import html2canvas from './libraries/html2canvas.js'
 import { Record } from './record.js'
 import { Session } from './session.js'
@@ -16,17 +16,7 @@ export class Game extends EventRegister {
 		this.on(gameControls.restart, () => this.newSession({ configOverrides }))
 		this.newSession({ configOverrides })
 
-		this.io.input.onAny(direction => {
-			const moved = this.session.field.move(direction)
-			if (moved.length !== 0) {
-				this.session.appearTile()
-			}
-			if (this.session.isGameOver()) {
-				const max = Math.max(...this.session.field.data.flat())
-				this.record.add(max)
-				this.session.emit(gameEvents.gameOver, max)
-			}
-		})
+		this.io.input.onAny(direction => this.session.next(direction))
 	}
 	newSession({
 		configOverrides,
@@ -37,8 +27,7 @@ export class Game extends EventRegister {
 			randomSeed,
 			game: this
 		})
-		this.io.emit(gameEvents.sessionInit)
-		this.session.appearTile(this.session.config.initAppearTileLength)
+		this.session.init()
 	}
 	async screenshot() {
 		const imageCanvas = await html2canvas(this.io.output.fieldElement)
