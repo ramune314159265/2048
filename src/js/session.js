@@ -14,7 +14,6 @@ export class Session extends EventRegister {
 		this.config = new Config(configOverrides)
 		this.field = new Field(this)
 		this.random = new Random(randomSeed ?? randomInteger(100_000_000))
-		console.log(randomSeed, this.random.w)
 	}
 	appearTile(length) {
 		const blankTiles = []

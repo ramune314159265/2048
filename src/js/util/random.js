@@ -22,4 +22,10 @@ export class Random {
 		const r = Math.abs(this.w)
 		return min + (r % (max + 1 - min))
 	}
+	getValues() {
+		return [this.x, this.y, this.z, this.w]
+	}
+	setValues(x, y, z, w) {
+		[this.x, this.y, this.z, this.w] = [x, y, z, w]
+	}
 }
