@@ -21,6 +21,7 @@ export class Session extends EventRegister {
 
 		this.game.io.input.on(gameControls.next, () => this.rewind(this.step + 1))
 		this.game.io.input.on(gameControls.previous, () => this.rewind(this.step - 1))
+		this.game.io.input.on(gameControls.setStep, step => this.rewind(step))
 	}
 	init() {
 		this.game.io.emit(gameEvents.sessionInit)

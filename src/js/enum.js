@@ -23,4 +23,5 @@ export const gameControls = Object.freeze({
 	restart: Symbol('restart'),
 	next: Symbol('next'),
 	previous: Symbol('previous'),
+	setStep: Symbol('setStep'),
 })
