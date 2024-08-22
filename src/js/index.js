@@ -17,7 +17,6 @@ export class Game extends EventRegister {
 		this.newSession({ configOverrides })
 
 		this.io.input.onAny(direction => {
-			console.log(direction)
 			if (!Object.values(directions).includes(direction)) {
 				return
 			}

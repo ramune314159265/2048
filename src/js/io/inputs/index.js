@@ -11,6 +11,6 @@ export class GameInput extends EventRegister {
 		io.mainElement.querySelector('.screenshot').addEventListener('click', () => io.game.screenshot())
 		io.mainElement.querySelector('.next').addEventListener('click', () => this.emit(gameControls.next))
 		io.mainElement.querySelector('.previous').addEventListener('click', () => this.emit(gameControls.previous))
-		io.mainElement.querySelector('.stepBar').addEventListener('change', e => this.emit(gameControls.setStep, e.target.value))
+		io.mainElement.querySelector('.stepBar').addEventListener('change', e => this.emit(gameControls.setStep, Number(e.target.value)))
 	}
 }

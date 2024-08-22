@@ -1,5 +1,5 @@
 import { Config } from './configs.js'
-import { gameControls, gameEvents, outputCommands } from './enum.js'
+import { directions, gameControls, gameEvents, outputCommands } from './enum.js'
 import { Field } from './field.js'
 import { PlayRecorder } from './playRecorder.js'
 import { EventRegister } from './util/eventRegister.js'
@@ -19,7 +19,7 @@ export class Session extends EventRegister {
 		this.step = 0
 		this.recorder = new PlayRecorder()
 
-		this.game.io.input.on(gameControls.next, () => this.rewind(this.step + 1))
+		this.game.io.input.on(gameControls.next, () => this.next(directions[this.recorder.data[this.step + 1]?.direction]))
 		this.game.io.input.on(gameControls.previous, () => this.rewind(this.step - 1))
 		this.game.io.input.on(gameControls.setStep, step => this.rewind(step))
 	}
@@ -36,10 +36,17 @@ export class Session extends EventRegister {
 		this.game.io.output.emit(outputCommands.stepChange, this.step, this.recorder.data.length - 1)
 	}
 	next(direction) {
+		if (!Object.values(directions).includes(direction)) {
+			return
+		}
 		const moved = this.field.move(direction)
 		if (moved.length !== 0) {
 			this.field.appearTile()
 			this.step++
+			if (directions?.[this.recorder.data[this.step]?.direction] === direction) {
+				this.game.io.output.emit(outputCommands.stepChange, this.step, this.recorder.data.length - 1)
+				return
+			}
 			this.recorder.deleteAfter(this.step)
 			this.recorder.add({
 				randomGenValues: this.random.getValues(),
