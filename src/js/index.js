@@ -1,4 +1,4 @@
-import { gameControls } from './enum.js'
+import { directions, gameControls } from './enum.js'
 import html2canvas from './libraries/html2canvas.js'
 import { Record } from './record.js'
 import { Session } from './session.js'
@@ -13,10 +13,16 @@ export class Game extends EventRegister {
 		this.session = null
 		this.record = new Record()
 		this.io = new IOClass(this)
-		this.on(gameControls.restart, () => this.newSession({ configOverrides }))
+		this.io.input.on(gameControls.restart, () => this.newSession({ configOverrides }))
 		this.newSession({ configOverrides })
 
-		this.io.input.onAny(direction => this.session.next(direction))
+		this.io.input.onAny(direction => {
+			console.log(direction)
+			if (!Object.values(directions).includes(direction)) {
+				return
+			}
+			this.session.next(direction)
+		})
 	}
 	newSession({
 		configOverrides,

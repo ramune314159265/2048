@@ -19,6 +19,21 @@ export class HtmlOutput extends GameOutput {
 		this.on(outputCommands.update, (x, y, state) => this.#updateTile(x, y, state))
 		this.on(outputCommands.remove, (x, y, toX, toY) => this.#removeTile(x, y, toX, toY))
 		this.on(outputCommands.bulkSet, (data) => this.bulkSet(data))
+		this.on(outputCommands.stepChange, (step, all) => {
+			this.game.io.mainElement.querySelector('.steps').textContent = `${step} / ${all}`
+			this.game.io.mainElement.querySelector('.stepBar').max = all
+			this.game.io.mainElement.querySelector('.stepBar').value = step
+			if (all <= step) {
+				this.game.io.mainElement.querySelector('.next').setAttribute("disabled", true)
+			} else {
+				this.game.io.mainElement.querySelector('.next').removeAttribute("disabled")
+			}
+			if (step <= 0) {
+				this.game.io.mainElement.querySelector('.previous').setAttribute("disabled", true)
+			} else {
+				this.game.io.mainElement.querySelector('.previous').removeAttribute("disabled")
+			}
+		})
 	}
 	init() {
 		this.fieldElement.style.gridTemplateColumns = `repeat(${this.game.session.config.fieldWidth}, 80px)`

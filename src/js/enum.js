@@ -11,6 +11,7 @@ export const outputCommands = Object.freeze({
 	move: Symbol('move'),
 	remove: Symbol('remove'),
 	bulkSet: Symbol('bulkSet'),
+	stepChange: Symbol('stepChange'),
 })
 
 export const gameEvents = Object.freeze({
@@ -20,4 +21,6 @@ export const gameEvents = Object.freeze({
 
 export const gameControls = Object.freeze({
 	restart: Symbol('restart'),
+	next: Symbol('next'),
+	previous: Symbol('previous'),
 })

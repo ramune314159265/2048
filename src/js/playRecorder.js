@@ -5,7 +5,6 @@ export class PlayRecorder {
 	add({
 		randomGenValues, field, direction
 	}) {
-		console.log('2',randomGenValues)
 		this.data.push({
 			randomGenValues,
 			field,

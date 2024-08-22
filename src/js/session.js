@@ -1,5 +1,5 @@
 import { Config } from './configs.js'
-import { gameEvents } from './enum.js'
+import { gameControls, gameEvents, outputCommands } from './enum.js'
 import { Field } from './field.js'
 import { PlayRecorder } from './playRecorder.js'
 import { EventRegister } from './util/eventRegister.js'
@@ -18,11 +18,13 @@ export class Session extends EventRegister {
 		this.random = new Random(randomSeed ?? randomInteger(100_000_000))
 		this.step = 0
 		this.recorder = new PlayRecorder()
+
+		this.game.io.input.on(gameControls.next, () => this.rewind(this.step + 1))
+		this.game.io.input.on(gameControls.previous, () => this.rewind(this.step - 1))
 	}
 	init() {
 		this.game.io.emit(gameEvents.sessionInit)
 		const randomGenValues = this.random.getValues()
-		console.log(randomGenValues)
 		this.field.appearTile(this.config.initAppearTileLength)
 		this.recorder.add({
 			randomGenValues,
@@ -30,6 +32,7 @@ export class Session extends EventRegister {
 			direction: null
 		})
 		this.random.setValues(...randomGenValues)
+		this.game.io.output.emit(outputCommands.stepChange, this.step, this.recorder.data.length - 1)
 	}
 	next(direction) {
 		const moved = this.field.move(direction)
@@ -42,6 +45,7 @@ export class Session extends EventRegister {
 				field: structuredClone(this.field.data),
 				direction: direction
 			})
+			this.game.io.output.emit(outputCommands.stepChange, this.step, this.recorder.data.length - 1)
 		}
 		if (this.isGameOver()) {
 			const max = Math.max(...this.field.data.flat())
@@ -80,5 +84,6 @@ export class Session extends EventRegister {
 		this.field.bulkSet(structuredClone(this.recorder.data.at(step).field))
 		this.random.setValues(...this.recorder.data.at(step).randomGenValues)
 		this.step = step
+		this.game.io.output.emit(outputCommands.stepChange, this.step, this.recorder.data.length - 1)
 	}
 }

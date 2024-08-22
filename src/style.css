@@ -40,13 +40,14 @@ button:not(:disabled) {
 }
 
 .gamemain {
-	display: flex;
+	display: grid;
 	padding: var(--padding);
 	gap: var(--padding);
-	flex-direction: row;
 	background: var(--field-background-color);
 	border-radius: var(--border-radius);
 	box-shadow: var(--shadow);
+	grid-template-columns: 1fr 128px;
+	grid-template-rows: 1fr 48px;
 }
 
 .sidebar {
@@ -64,13 +65,31 @@ button:not(:disabled) {
 }
 
 .buttons {
-    display: flex;
-    flex-direction: column;
-    gap: var(--padding);
+	display: flex;
+	flex-direction: column;
+	gap: var(--padding);
 }
 
 .buttons>button {
 	width: 100%;
+}
+
+.stepControl {
+	grid-column: 1 / 3;
+	display: grid;
+	gap: var(--padding);
+	grid-template-columns: 48px 1fr 48px;
+}
+
+.stepBar {
+	width: 100%;
+}
+
+.stepInfo {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
 
 .field {
