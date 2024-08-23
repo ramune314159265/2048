@@ -36,8 +36,19 @@ export class Game extends EventRegister {
 	}
 	async screenshot() {
 		const newWindow = window.open("about:blank", Math.random())
-		const imageElement = newWindow.document.createElement('img')
-		imageElement.src = await toPng(this.io.output.fieldElement)
-		newWindow.document.body.appendChild(imageElement)
+		const elementsToImage = [
+			this.io.output.fieldElement,
+			this.io.mainElement
+		]
+		Promise.all(
+			elementsToImage
+				.map(async e => {
+					const url = await toPng(e)
+					const imageElement = newWindow.document.createElement('img')
+					imageElement.src = url
+					imageElement.style.display = 'block'
+					newWindow.document.body.appendChild(imageElement)
+				})
+		)
 	}
 }
