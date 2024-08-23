@@ -1,5 +1,5 @@
 import { directions, gameControls } from './enum.js'
-import html2canvas from './libraries/html2canvas.js'
+import { toPng } from './libraries/domtoimage.js'
 import { Record } from './record.js'
 import { Session } from './session.js'
 import { EventRegister } from './util/eventRegister.js'
@@ -35,11 +35,9 @@ export class Game extends EventRegister {
 		this.session.init()
 	}
 	async screenshot() {
-		const imageCanvas = await html2canvas(this.io.output.fieldElement)
-		const imageUrl = imageCanvas.toDataURL("image/png")
 		const newWindow = window.open("about:blank", Math.random())
 		const imageElement = newWindow.document.createElement('img')
-		imageElement.src = imageUrl
+		imageElement.src = await toPng(this.io.output.fieldElement)
 		newWindow.document.body.appendChild(imageElement)
 	}
 }

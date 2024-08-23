@@ -1,4 +1,3 @@
-import { gameEvents } from '../enum.js'
 import { GameIO } from './index.js'
 import { KeyboardInput } from './inputs/keyboard.js'
 import { HtmlOutput } from './outputs/html.js'
@@ -10,9 +9,5 @@ export class ManualIO extends GameIO {
 
 		this.input = new KeyboardInput(this, game)
 		this.output = new HtmlOutput(this, game)
-
-		this.on(gameEvents.sessionInit, () => {
-			this.output.emit(gameEvents.sessionInit)
-		})
 	}
 }

@@ -1,3 +1,4 @@
+import { gameEvents } from '../enum.js'
 import { EventRegister } from '../util/eventRegister.js'
 
 export class GameIO extends EventRegister{
@@ -12,5 +13,9 @@ export class GameIO extends EventRegister{
 		this.mainElement.classList.add('gamemain')
 		this.mainElement.appendChild(content)
 		document.body.append(this.mainElement)
+
+		this.on(gameEvents.sessionInit, () => {
+			this.output.emit(gameEvents.sessionInit)
+		})
 	}
 }

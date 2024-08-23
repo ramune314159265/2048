@@ -7,7 +7,9 @@ export class OrderInput extends GameInput {
 		this.intervalId = 0
 		this.controls = [directions.right, directions.up, directions.left, directions.down]
 		this.order = 0
-		this.init()
+		this.io.on(gameEvents.sessionInit, () => {
+			this.init()
+		})
 	}
 	init() {
 		this.intervalId = setInterval(() => {
@@ -18,8 +20,8 @@ export class OrderInput extends GameInput {
 			}
 		}, this.game.session.config.animationDuration)
 
-		this.game.session.on(gameEvents.gameOver, () => {
-			setTimeout(() => this.game.emit(gameControls.restart), 0)
+		this.game.session.once(gameEvents.gameOver, () => {
+			setTimeout(() => this.emit(gameControls.restart), 0)
 		})
 	}
 }

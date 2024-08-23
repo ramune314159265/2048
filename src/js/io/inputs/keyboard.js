@@ -32,7 +32,7 @@ export class KeyboardInput extends GameInput {
 			}
 		}
 		this.touchStartHandler = e => {
-			if (e.target.tagName === 'BUTTON') {
+			if (e.target.classList.contains('touchable')) {
 				return
 			}
 			e.preventDefault()
@@ -81,7 +81,7 @@ export class KeyboardInput extends GameInput {
 		this.io.on(gameEvents.sessionInit, () => {
 			this.game.session.once(gameEvents.gameOver, (max) => {
 				alert(`ゲームオーバー\n結果: ${HtmlOutput.toDisplayNumber(max)}`)
-				setTimeout(() => this.game.emit(gameControls.restart), 0)
+				setTimeout(() => this.emit(gameControls.restart), 0)
 			})
 		})
 	}
