@@ -80,8 +80,15 @@ export class KeyboardInput extends GameInput {
 
 		this.io.on(gameEvents.sessionInit, () => {
 			this.game.session.once(gameEvents.gameOver, (max) => {
-				alert(`ゲームオーバー\n結果: ${HtmlOutput.toDisplayNumber(max)}`)
-				setTimeout(() => this.emit(gameControls.restart), 0)
+				const requestedRestart = confirm([
+					`ゲームオーバー`,
+					`結果: ${HtmlOutput.toDisplayNumber(max)}`,
+					``,
+					`リセットしますか?`
+				].join('\n'))
+				if (requestedRestart) {
+					setTimeout(() => this.emit(gameControls.restart), 0)
+				}
 			})
 		})
 	}
