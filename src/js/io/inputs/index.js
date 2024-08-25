@@ -1,16 +1,14 @@
-import { gameControls } from '../../enum.js'
-import { EventRegister } from '../../util/eventRegister.js'
+import { inputCommands } from '../../enum.js'
 
-export class GameInput extends EventRegister {
+export class GameInput {
 	constructor(io, game) {
-		super()
 		this.game = game
 		this.io = io
 
-		io.mainElement.querySelector('.reset').addEventListener('click', () => this.emit(gameControls.restart))
+		io.mainElement.querySelector('.reset').addEventListener('click', () => io.emit(inputCommands.restart))
 		io.mainElement.querySelector('.screenshot').addEventListener('click', () => io.game.screenshot())
-		io.mainElement.querySelector('.next').addEventListener('click', () => this.emit(gameControls.next))
-		io.mainElement.querySelector('.previous').addEventListener('click', () => this.emit(gameControls.previous))
-		io.mainElement.querySelector('.stepBar').addEventListener('change', e => this.emit(gameControls.setStep, Number(e.target.value)))
+		io.mainElement.querySelector('.next').addEventListener('click', () => io.emit(inputCommands.next))
+		io.mainElement.querySelector('.previous').addEventListener('click', () => io.emit(inputCommands.previous))
+		io.mainElement.querySelector('.stepBar').addEventListener('change', e => io.emit(inputCommands.setStep, Number(e.target.value)))
 	}
 }

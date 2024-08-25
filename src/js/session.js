@@ -1,5 +1,5 @@
 import { Config } from './configs.js'
-import { directions, gameControls, gameEvents, outputCommands } from './enum.js'
+import { directions, gameEvents, inputCommands, outputCommands } from './enum.js'
 import { Field } from './field.js'
 import { PlayRecorder } from './playRecorder.js'
 import { EventRegister } from './util/eventRegister.js'
@@ -19,9 +19,9 @@ export class Session extends EventRegister {
 		this.step = 0
 		this.recorder = new PlayRecorder()
 
-		this.game.io.input.on(gameControls.next, () => this.next(directions[this.recorder.data[this.step + 1]?.direction]))
-		this.game.io.input.on(gameControls.previous, () => this.rewind(this.step - 1))
-		this.game.io.input.on(gameControls.setStep, step => this.rewind(step))
+		this.game.io.on(inputCommands.next, () => this.next(directions[this.recorder.data[this.step + 1]?.direction]))
+		this.game.io.on(inputCommands.previous, () => this.rewind(this.step - 1))
+		this.game.io.on(inputCommands.setStep, step => this.rewind(step))
 	}
 	init() {
 		this.game.io.emit(gameEvents.sessionInit)
@@ -33,7 +33,7 @@ export class Session extends EventRegister {
 			direction: null
 		})
 		this.random.setValues(...randomGenValues)
-		this.game.io.output.emit(outputCommands.stepChange, this.step, this.recorder.data.length - 1)
+		this.game.io.emit(outputCommands.stepChange, this.step, this.recorder.data.length - 1)
 	}
 	next(direction) {
 		if (!Object.values(directions).includes(direction)) {
@@ -44,7 +44,7 @@ export class Session extends EventRegister {
 			this.field.appearTile()
 			this.step++
 			if (directions?.[this.recorder.data[this.step]?.direction] === direction) {
-				this.game.io.output.emit(outputCommands.stepChange, this.step, this.recorder.data.length - 1)
+				this.game.io.emit(outputCommands.stepChange, this.step, this.recorder.data.length - 1)
 				return
 			}
 			this.recorder.deleteAfter(this.step)
@@ -53,7 +53,7 @@ export class Session extends EventRegister {
 				field: structuredClone(this.field.data),
 				direction: direction
 			})
-			this.game.io.output.emit(outputCommands.stepChange, this.step, this.recorder.data.length - 1)
+			this.game.io.emit(outputCommands.stepChange, this.step, this.recorder.data.length - 1)
 		}
 		if (this.isGameOver()) {
 			const max = Math.max(...this.field.data.flat())
@@ -92,6 +92,6 @@ export class Session extends EventRegister {
 		this.field.bulkSet(structuredClone(this.recorder.data.at(step).field))
 		this.random.setValues(...this.recorder.data.at(step).randomGenValues)
 		this.step = step
-		this.game.io.output.emit(outputCommands.stepChange, this.step, this.recorder.data.length - 1)
+		this.game.io.emit(outputCommands.stepChange, this.step, this.recorder.data.length - 1)
 	}
 }

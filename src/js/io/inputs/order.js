@@ -1,4 +1,4 @@
-import { directions, gameControls, gameEvents } from '../../enum.js'
+import { directions, gameEvents, inputCommands } from '../../enum.js'
 import { GameInput } from './index.js'
 
 export class OrderInput extends GameInput {
@@ -13,7 +13,7 @@ export class OrderInput extends GameInput {
 	}
 	init() {
 		this.intervalId = setInterval(() => {
-			this.emit(this.controls[this.order])
+			this.io.emit(this.controls[this.order])
 			this.order++
 			if (this.controls.length <= this.order) {
 				this.order = 0
@@ -21,7 +21,7 @@ export class OrderInput extends GameInput {
 		}, this.game.session.config.animationDuration)
 
 		this.game.session.once(gameEvents.gameOver, () => {
-			setTimeout(() => this.emit(gameControls.restart), 0)
+			setTimeout(() => this.io.emit(inputCommands.restart), 0)
 		})
 	}
 }

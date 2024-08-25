@@ -8,18 +8,17 @@ export class HtmlOutput extends GameOutput {
 	}
 	constructor(io, game) {
 		super(io, game)
-		this.game = game
 
 		this.fieldElement = io.mainElement.querySelector('.field')
 		this.fieldElement.classList.add('field')
 
-		this.on(gameEvents.sessionInit, () => this.init())
-		this.on(outputCommands.add, (x, y, state) => this.#addTile(x, y, state))
-		this.on(outputCommands.move, (x, y, toX, toY) => this.#moveTile(x, y, toX, toY))
-		this.on(outputCommands.update, (x, y, state) => this.#updateTile(x, y, state))
-		this.on(outputCommands.remove, (x, y, toX, toY) => this.#removeTile(x, y, toX, toY))
-		this.on(outputCommands.bulkSet, (data) => this.bulkSet(data))
-		this.on(outputCommands.stepChange, (step, all) => {
+		this.io.on(gameEvents.sessionInit, () => this.init())
+		this.io.on(outputCommands.add, (x, y, state) => this.#addTile(x, y, state))
+		this.io.on(outputCommands.move, (x, y, toX, toY) => this.#moveTile(x, y, toX, toY))
+		this.io.on(outputCommands.update, (x, y, state) => this.#updateTile(x, y, state))
+		this.io.on(outputCommands.remove, (x, y, toX, toY) => this.#removeTile(x, y, toX, toY))
+		this.io.on(outputCommands.bulkSet, (data) => this.bulkSet(data))
+		this.io.on(outputCommands.stepChange, (step, all) => {
 			this.game.io.mainElement.querySelector('.steps').textContent = `${step} / ${all}`
 			this.game.io.mainElement.querySelector('.stepBar').max = all
 			this.game.io.mainElement.querySelector('.stepBar').value = step

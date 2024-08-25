@@ -1,9 +1,9 @@
 import { Game } from './js/index.js'
-import { ManualIO } from './js/io/manual.js'
+import { RandomIO } from './js/io/random.js'
 
 const run = () => {
 	const gameMain = new Game({
-		IOClass: ManualIO,
+		IOClass: RandomIO,
 		configOverrides: {}
 	})
 

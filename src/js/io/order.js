@@ -2,7 +2,7 @@ import { GameIO } from './index.js'
 import { OrderInput } from './inputs/order.js'
 import { HtmlOutput } from './outputs/html.js'
 
-export class ORderIO extends GameIO {
+export class OrderIO extends GameIO {
 	constructor(game) {
 		super(game)
 		this.game = game

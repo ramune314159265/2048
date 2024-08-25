@@ -1,4 +1,4 @@
-import { directions, gameControls } from './enum.js'
+import { directions, inputCommands } from './enum.js'
 import { toPng } from './libraries/domtoimage.js'
 import { Record } from './record.js'
 import { Session } from './session.js'
@@ -13,10 +13,10 @@ export class Game extends EventRegister {
 		this.session = null
 		this.record = new Record()
 		this.io = new IOClass(this)
-		this.io.input.on(gameControls.restart, () => this.newSession({ configOverrides }))
+		this.io.on(inputCommands.restart, () => this.newSession({ configOverrides }))
 		this.newSession({ configOverrides })
 
-		this.io.input.onAny(direction => {
+		this.io.onAny(direction => {
 			if (!Object.values(directions).includes(direction)) {
 				return
 			}

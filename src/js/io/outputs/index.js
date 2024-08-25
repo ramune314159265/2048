@@ -1,8 +1,7 @@
-import { EventRegister } from '../../util/eventRegister.js'
 
-export class GameOutput extends EventRegister {
+export class GameOutput {
 	constructor(io, game) {
-		super()
 		this.game = game
+		this.io = io
 	}
 }

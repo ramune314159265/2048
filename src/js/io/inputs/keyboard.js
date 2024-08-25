@@ -1,4 +1,4 @@
-import { directions, gameControls, gameEvents } from '../../enum.js'
+import { directions, gameEvents, inputCommands } from '../../enum.js'
 import { HtmlOutput } from '../outputs/html.js'
 import { GameInput } from './index.js'
 
@@ -16,16 +16,16 @@ export class KeyboardInput extends GameInput {
 			e.preventDefault()
 			switch (true) {
 				case e.key === 'ArrowUp' || e.key === 'w':
-					this.emit(directions.up)
+					this.io.emit(directions.up)
 					break
 				case e.key === 'ArrowLeft' || e.key === 'a':
-					this.emit(directions.left)
+					this.io.emit(directions.left)
 					break
 				case e.key === 'ArrowDown' || e.key === 's':
-					this.emit(directions.down)
+					this.io.emit(directions.down)
 					break
 				case e.key === 'ArrowRight' || e.key === 'd':
-					this.emit(directions.right)
+					this.io.emit(directions.right)
 					break
 				default:
 					break
@@ -54,19 +54,19 @@ export class KeyboardInput extends GameInput {
 					return
 				}
 				if (absDistanceX < absDistanceY && distanceY < 0) {
-					this.emit(directions.up)
+					this.io.emit(directions.up)
 					return
 				}
 				if (absDistanceY < absDistanceX && 0 < distanceX) {
-					this.emit(directions.right)
+					this.io.emit(directions.right)
 					return
 				}
 				if (absDistanceX < absDistanceY && 0 < distanceY) {
-					this.emit(directions.down)
+					this.io.emit(directions.down)
 					return
 				}
 				if (absDistanceY < absDistanceX && distanceX < 0) {
-					this.emit(directions.left)
+					this.io.emit(directions.left)
 					return
 				}
 				document.removeEventListener('touchmove', touchMoveHandler, { passive: true })
@@ -87,7 +87,7 @@ export class KeyboardInput extends GameInput {
 					`リセットしますか?`
 				].join('\n'))
 				if (requestedRestart) {
-					setTimeout(() => this.emit(gameControls.restart), 0)
+					setTimeout(() => this.io.emit(inputCommands.restart), 0)
 				}
 			})
 		})

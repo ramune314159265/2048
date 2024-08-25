@@ -5,6 +5,14 @@ export const directions = Object.freeze({
 	right: Symbol('right'),
 })
 
+export const inputCommands = Object.freeze({
+	...directions,
+	restart: Symbol('restart'),
+	next: Symbol('next'),
+	previous: Symbol('previous'),
+	setStep: Symbol('setStep'),
+})
+
 export const outputCommands = Object.freeze({
 	add: Symbol('add'),
 	update: Symbol('update'),
@@ -17,11 +25,4 @@ export const outputCommands = Object.freeze({
 export const gameEvents = Object.freeze({
 	gameOver: Symbol('gameOver'),
 	sessionInit: Symbol('sessionInit'),
-})
-
-export const gameControls = Object.freeze({
-	restart: Symbol('restart'),
-	next: Symbol('next'),
-	previous: Symbol('previous'),
-	setStep: Symbol('setStep'),
 })
