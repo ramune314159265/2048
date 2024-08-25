@@ -17,6 +17,7 @@ export class RandomInput extends GameInput {
 		}, this.game.session.config.animationDuration)
 
 		this.game.session.once(gameEvents.gameOver, () => {
+			clearInterval(this.intervalId)
 			setTimeout(() => this.io.emit(inputCommands.restart), 0)
 		})
 	}
