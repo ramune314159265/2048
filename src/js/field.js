@@ -21,14 +21,14 @@ export class Field {
 		}
 		this.data[y][x] = id
 	}
-	addTile(x, y, state) {
+	#addTile(x, y, state) {
 		if (this.isTileFilled(x, y)) {
 			return
 		}
 		this.#setTileState(x, y, state)
 		this.session.game.io.emit(outputCommands.add, x, y, state)
 	}
-	moveTile(x, y, toX, toY) {
+	#moveTile(x, y, toX, toY) {
 		if (!this.isTileFilled(x, y) && this.isTileFilled(toX, toY)) {
 			return
 		}
@@ -37,7 +37,7 @@ export class Field {
 		this.#setTileState(toX, toY, originTileState)
 		this.session.game.io.emit(outputCommands.move, x, y, toX, toY)
 	}
-	mergeTile(x, y, targetX, targetY) {
+	#mergeTile(x, y, targetX, targetY) {
 		if (!this.isTileFilled(x, y) && !this.isTileFilled(targetX, targetY)) {
 			return
 		}
@@ -91,10 +91,10 @@ export class Field {
 						}
 						const selfTileState = this.getTileState(convertedX, convertedY)
 						if (selfTileState === this.getTileState(convertedX, positionY)) {
-							this.mergeTile(convertedX, convertedY, convertedX, positionY)
+							this.#mergeTile(convertedX, convertedY, convertedX, positionY)
 							moved.push([convertedX, convertedY, convertedX, positionY])
 						} else {
-							this.moveTile(convertedX, convertedY, convertedX, directionBit.at(-1) === '1' ? positionY - 1 : positionY + 1)
+							this.#moveTile(convertedX, convertedY, convertedX, directionBit.at(-1) === '1' ? positionY - 1 : positionY + 1)
 							moved.push([convertedX, convertedY, convertedX, directionBit.at(-1) === '1' ? positionY - 1 : positionY + 1])
 						}
 						break
@@ -108,10 +108,10 @@ export class Field {
 						}
 						const selfTileState = this.getTileState(convertedX, convertedY)
 						if (selfTileState === this.getTileState(positionX, convertedY)) {
-							this.mergeTile(convertedX, convertedY, positionX, convertedY)
+							this.#mergeTile(convertedX, convertedY, positionX, convertedY)
 							moved.push([convertedX, convertedY, positionX, convertedY])
 						} else {
-							this.moveTile(convertedX, convertedY, directionBit.at(-1) === '1' ? positionX - 1 : positionX + 1, convertedY)
+							this.#moveTile(convertedX, convertedY, directionBit.at(-1) === '1' ? positionX - 1 : positionX + 1, convertedY)
 							moved.push([convertedX, convertedY, directionBit.at(-1) === '1' ? positionX - 1 : positionX + 1, convertedY])
 						}
 						break
@@ -135,7 +135,7 @@ export class Field {
 			return [...blankTiles].splice(randomStartIndex, 1).at()
 		})
 		targetTiles.forEach(tile => {
-			this.addTile(tile[0], tile[1], this.session.config.availableTiles[this.session.random.generate(0, this.session.config.availableTiles.length - 1)])
+			this.#addTile(tile[0], tile[1], this.session.config.availableTiles[this.session.random.generate(0, this.session.config.availableTiles.length - 1)])
 		})
 	}
 }
