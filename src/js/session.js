@@ -18,6 +18,7 @@ export class Session extends EventRegister {
 		this.random = new Random(randomSeed ?? randomInteger(100_000_000))
 		this.step = 0
 		this.recorder = new PlayRecorder()
+		this.isGameOvered = false
 
 		this.game.io.on(inputCommands.next, () => this.next(directions[this.recorder.data[this.step + 1]?.direction]))
 		this.game.io.on(inputCommands.previous, () => this.rewind(this.step - 1))
@@ -56,9 +57,13 @@ export class Session extends EventRegister {
 			this.game.io.emit(outputCommands.stepChange, this.step, this.recorder.data.length - 1)
 		}
 		if (this.isGameOver()) {
+			if (this.isGameOvered) {
+				return
+			}
 			const max = Math.max(...this.field.data.flat())
 			this.game.record.add(max)
 			this.emit(gameEvents.gameOver, max)
+			this.isGameOvered = true
 		}
 	}
 	isGameOver() {
