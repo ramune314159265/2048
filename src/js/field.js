@@ -55,6 +55,7 @@ export class Field {
 		this.session.game.io.emit(outputCommands.bulkSet, data)
 	}
 	move(direction) {
+		const merged = []
 		const moved = []
 		const directionDict = {
 			[directions.up]: 0,    //00
@@ -90,9 +91,10 @@ export class Field {
 							continue
 						}
 						const selfTileState = this.getTileState(convertedX, convertedY)
-						if (selfTileState === this.getTileState(convertedX, positionY)) {
+						if (selfTileState === this.getTileState(convertedX, positionY) && !merged.includes(positionY * this.session.config.fieldWidth + convertedX)) {
 							this.#mergeTile(convertedX, convertedY, convertedX, positionY)
 							moved.push([convertedX, convertedY, convertedX, positionY])
+							merged.push(positionY * this.session.config.fieldWidth + convertedX)
 						} else {
 							this.#moveTile(convertedX, convertedY, convertedX, directionBit.at(-1) === '1' ? positionY - 1 : positionY + 1)
 							moved.push([convertedX, convertedY, convertedX, directionBit.at(-1) === '1' ? positionY - 1 : positionY + 1])
@@ -107,9 +109,10 @@ export class Field {
 							continue
 						}
 						const selfTileState = this.getTileState(convertedX, convertedY)
-						if (selfTileState === this.getTileState(positionX, convertedY)) {
+						if (selfTileState === this.getTileState(positionX, convertedY) && !merged.includes(convertedY * this.session.config.fieldWidth + positionX)) {
 							this.#mergeTile(convertedX, convertedY, positionX, convertedY)
 							moved.push([convertedX, convertedY, positionX, convertedY])
+							merged.push(convertedY * this.session.config.fieldWidth + positionX)
 						} else {
 							this.#moveTile(convertedX, convertedY, directionBit.at(-1) === '1' ? positionX - 1 : positionX + 1, convertedY)
 							moved.push([convertedX, convertedY, directionBit.at(-1) === '1' ? positionX - 1 : positionX + 1, convertedY])
