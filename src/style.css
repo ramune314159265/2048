@@ -1,10 +1,23 @@
 :root {
 	--border-radius: 8px;
 	--padding: 16px;
+	--text-color: #000000;
 	--background-color: #e0e0e0;
-	--field-background-color: #eeeeee;
+	--gamemain-background-color: #eeeeee;
 	--field-tile-background-color: #ffffff;
 	--shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--border-radius: 8px;
+		--padding: 16px;
+		--text-color: #f3f3f3;
+		--background-color: #2e2e2e;
+		--gamemain-background-color: #3f3f3f;
+		--field-tile-background-color: #606060;
+		--shadow: rgba(14, 30, 37, 0.12) 0px 4px 6px -1px, rgba(14, 30, 37, 0.32) 0px 2px 4px -1px;
+	}
 }
 
 * {
@@ -20,6 +33,7 @@ html {
 }
 
 body {
+	color: var(--text-color);
 	background: var(--background-color);
 	width: 100dvw;
 	height: 100dvh;
@@ -30,6 +44,7 @@ body {
 }
 
 button {
+	color: var(--text-color);
 	padding: var(--padding);
 	background: var(--field-tile-background-color);
 	border: none;
@@ -44,7 +59,7 @@ button:not(:disabled) {
 	display: grid;
 	padding: var(--padding);
 	gap: var(--padding);
-	background: var(--field-background-color);
+	background: var(--gamemain-background-color);
 	border-radius: var(--border-radius);
 	box-shadow: var(--shadow);
 	grid-template-columns: 1fr 128px;
