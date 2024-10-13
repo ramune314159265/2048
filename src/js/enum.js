@@ -26,3 +26,8 @@ export const gameEvents = Object.freeze({
 	gameOver: Symbol('gameOver'),
 	sessionInit: Symbol('sessionInit'),
 })
+
+export const changedType = Object.freeze({
+	moved: Symbol('moved'),
+	merged: Symbol('merged'),
+})

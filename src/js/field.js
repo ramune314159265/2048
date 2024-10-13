@@ -1,4 +1,4 @@
-import { directions, outputCommands } from './enum.js'
+import { changedType, directions, outputCommands } from './enum.js'
 
 export class Field {
 	static emptyState = 0
@@ -56,7 +56,7 @@ export class Field {
 	}
 	move(direction) {
 		const merged = []
-		const moved = []
+		const changed = []
 		const directionDict = {
 			[directions.up]: 0,    //00
 			[directions.down]: 1,  //01
@@ -93,11 +93,11 @@ export class Field {
 						const selfTileState = this.getTileState(convertedX, convertedY)
 						if (selfTileState === this.getTileState(convertedX, positionY) && !merged.includes(positionY * this.session.config.fieldWidth + convertedX)) {
 							this.#mergeTile(convertedX, convertedY, convertedX, positionY)
-							moved.push([convertedX, convertedY, convertedX, positionY])
+							changed.push([convertedX, convertedY, convertedX, positionY, changedType.merged])
 							merged.push(positionY * this.session.config.fieldWidth + convertedX)
 						} else {
 							this.#moveTile(convertedX, convertedY, convertedX, directionBit.at(-1) === '1' ? positionY - 1 : positionY + 1)
-							moved.push([convertedX, convertedY, convertedX, directionBit.at(-1) === '1' ? positionY - 1 : positionY + 1])
+							changed.push([convertedX, convertedY, convertedX, directionBit.at(-1) === '1' ? positionY - 1 : positionY + 1, changedType.moved])
 						}
 						break
 					} /*左右方向*/else if (directionBit.at(-2) === '1') {
@@ -111,18 +111,18 @@ export class Field {
 						const selfTileState = this.getTileState(convertedX, convertedY)
 						if (selfTileState === this.getTileState(positionX, convertedY) && !merged.includes(convertedY * this.session.config.fieldWidth + positionX)) {
 							this.#mergeTile(convertedX, convertedY, positionX, convertedY)
-							moved.push([convertedX, convertedY, positionX, convertedY])
+							changed.push([convertedX, convertedY, positionX, convertedY, changedType.merged])
 							merged.push(convertedY * this.session.config.fieldWidth + positionX)
 						} else {
 							this.#moveTile(convertedX, convertedY, directionBit.at(-1) === '1' ? positionX - 1 : positionX + 1, convertedY)
-							moved.push([convertedX, convertedY, directionBit.at(-1) === '1' ? positionX - 1 : positionX + 1, convertedY])
+							changed.push([convertedX, convertedY, directionBit.at(-1) === '1' ? positionX - 1 : positionX + 1, convertedY, changedType.moved])
 						}
 						break
 					}
 				}
 			})
 		})
-		return moved.filter(i => i[0] !== i[2] || i[1] !== i[3])
+		return changed.filter(i => i[0] !== i[2] || i[1] !== i[3])
 	}
 	appearTile(length) {
 		const blankTiles = []
