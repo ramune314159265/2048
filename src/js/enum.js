@@ -20,6 +20,7 @@ export const outputCommands = Object.freeze({
 	remove: Symbol('remove'),
 	bulkSet: Symbol('bulkSet'),
 	stepChange: Symbol('stepChange'),
+	scoreChange: Symbol('scoreChange'),
 })
 
 export const gameEvents = Object.freeze({

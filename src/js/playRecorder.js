@@ -3,12 +3,13 @@ export class PlayRecorder {
 		this.data = []
 	}
 	add({
-		randomGenValues, field, direction
+		randomGenValues, field, direction, score
 	}) {
 		this.data.push({
 			randomGenValues,
 			field,
-			direction: direction?.description ?? null
+			direction: direction?.description ?? null,
+			score
 		})
 	}
 	deleteAfter(start) {

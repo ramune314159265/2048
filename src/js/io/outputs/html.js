@@ -33,6 +33,9 @@ export class HtmlOutput extends GameOutput {
 				this.game.io.mainElement.querySelector('.previous').removeAttribute("disabled")
 			}
 		})
+		this.io.on(outputCommands.scoreChange, (score, added) => {
+			this.game.io.mainElement.querySelector('.score').textContent = `スコア: ${score}${added ? `(+${added})` : ''}`
+		})
 	}
 	init() {
 		this.fieldElement.style.gridTemplateColumns = `repeat(${this.game.session.config.fieldWidth}, 80px)`

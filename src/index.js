@@ -1,9 +1,9 @@
 import { Game } from './js/index.js'
-import { WebSocketIO } from './js/io/ws.js'
+import { ManualIO } from './js/io/manual.js'
 
 const run = () => {
 	const gameMain = new Game({
-		IOClass: WebSocketIO,
+		IOClass: ManualIO,
 		configOverrides: {}
 	})
 

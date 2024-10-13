@@ -1,5 +1,5 @@
 import { Config } from './configs.js'
-import { directions, gameEvents, inputCommands, outputCommands } from './enum.js'
+import { changedType, directions, gameEvents, inputCommands, outputCommands } from './enum.js'
 import { Field } from './field.js'
 import { PlayRecorder } from './playRecorder.js'
 import { EventRegister } from './util/eventRegister.js'
@@ -18,6 +18,7 @@ export class Session extends EventRegister {
 		this.random = new Random(randomSeed ?? randomInteger(100_000_000))
 		this.step = 0
 		this.recorder = new PlayRecorder()
+		this.score = 0
 		this.isGameOvered = false
 
 		this.game.io.on(inputCommands.next, () => this.next(directions[this.recorder.data[this.step + 1]?.direction]))
@@ -31,9 +32,11 @@ export class Session extends EventRegister {
 		this.recorder.add({
 			randomGenValues,
 			field: structuredClone(this.field.data),
-			direction: null
+			direction: null,
+			score: this.score
 		})
 		this.random.setValues(...randomGenValues)
+		this.game.io.emit(outputCommands.scoreChange, this.score)
 		this.game.io.emit(outputCommands.stepChange, this.step, this.recorder.data.length - 1)
 	}
 	next(direction) {
@@ -44,6 +47,12 @@ export class Session extends EventRegister {
 		if (moved.length !== 0) {
 			this.field.appearTile()
 			this.step++
+			const willAddedScore = moved
+				.filter(i => i[4] === changedType.merged)
+				.map(i => this.field.getTileState(i[2], i[3]))
+				.map(i => 2 ** i)
+				.reduce((p, c) => p + c, 0)
+			this.addScore(willAddedScore)
 			if (directions?.[this.recorder.data[this.step]?.direction] === direction) {
 				this.game.io.emit(outputCommands.stepChange, this.step, this.recorder.data.length - 1)
 				return
@@ -52,7 +61,8 @@ export class Session extends EventRegister {
 			this.recorder.add({
 				randomGenValues: this.random.getValues(),
 				field: structuredClone(this.field.data),
-				direction: direction
+				direction: direction,
+				score: this.score
 			})
 			this.game.io.emit(outputCommands.stepChange, this.step, this.recorder.data.length - 1)
 		}
@@ -65,6 +75,10 @@ export class Session extends EventRegister {
 			this.emit(gameEvents.gameOver, max)
 			this.isGameOvered = true
 		}
+	}
+	addScore(value) {
+		this.score += value
+		this.game.io.emit(outputCommands.scoreChange, this.score, value)
 	}
 	isGameOver() {
 		const isAllTileFilled = this.field.data.flat().every(tile => tile !== Field.emptyState)
@@ -91,12 +105,15 @@ export class Session extends EventRegister {
 		return isAllTileImmovable
 	}
 	rewind(step) {
-		if (!this.recorder.data.at(step)) {
+		const stepData = this.recorder.data.at(step)
+		if (!stepData) {
 			return
 		}
-		this.field.bulkSet(structuredClone(this.recorder.data.at(step).field))
-		this.random.setValues(...this.recorder.data.at(step).randomGenValues)
+		this.field.bulkSet(structuredClone(stepData.field))
+		this.random.setValues(...stepData.randomGenValues)
 		this.step = step
+		this.score = stepData.score
+		this.game.io.emit(outputCommands.scoreChange, this.score)
 		this.game.io.emit(outputCommands.stepChange, this.step, this.recorder.data.length - 1)
 	}
 }
