@@ -33,7 +33,6 @@ def message_received(client,server,message):
 		"type": "move",
 		"direction": random.choice(DIRECTIONS)
 	}))
-
 server = WebsocketServer(host='127.0.0.1',port=54999)
 server.set_fn_new_client(new_client)
 server.set_fn_message_received(message_received)
@@ -52,3 +51,24 @@ log_interval = 200
 num_eval_episodes = 10
 eval_interval = 1000
 
+fc_layer_params = (100,)
+
+q_net = q_network.QNetwork(
+    train_env.observation_spec(),
+    train_env.action_spec(),
+    fc_layer_params=fc_layer_params
+)
+
+optimizer = tf.compat.v1.train.AdamOptimizer(learning_rate=learning_rate)
+
+train_step_counter = tf.Variable(0)
+
+agent = dqn_agent.DqnAgent(
+    train_env.time_step_spec(),
+    train_env.action_spec(),
+    q_network=q_net,
+    optimizer=optimizer,
+    td_errors_loss_fn=common.element_wise_squared_loss,
+    train_step_counter=train_step_counter)
+
+agent.initialize()
