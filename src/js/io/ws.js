@@ -1,6 +1,6 @@
 import { GameIO } from './index.js'
 import { WebSocketInput } from './inputs/ws.js'
-import { HtmlOutput } from './outputs/html.js'
+import { WebSocketOutput } from './outputs/ws.js'
 
 export class WebSocketIO extends GameIO {
 	constructor(game) {
@@ -9,6 +9,6 @@ export class WebSocketIO extends GameIO {
 		this.ws = new WebSocket('ws://localhost:54999')
 
 		this.input = new WebSocketInput(this, game)
-		this.output = new HtmlOutput(this, game)
+		this.output = new WebSocketOutput(this, game)
 	}
 }

@@ -1,23 +1,22 @@
-import { directions, gameEvents } from '../../enum.js'
+import { directions, inputCommands } from '../../enum.js'
 import { GameInput } from './index.js'
 
 export class WebSocketInput extends GameInput {
 	constructor(io, game) {
 		super(io, game)
-		this.io.on(gameEvents.sessionInit, () => {
-			this.init()
-		})
-	}
-	init() {
-		this.io.ws.onmessage = message => {
+		this.io.ws.addEventListener('message', message => {
 			const data = JSON.parse(message.data)
-			console.log(data)
-			this.io.emit(directions[data.direction])
+			switch (data.type) {
+				case 'move':
+					this.io.emit(directions[data.direction])
+					break
 
-			setTimeout(() => {
-				const field = this.game.session.field.data
-				this.io.ws.send(JSON.stringify(field))
-			}, 0)
-		}
+				case 'restart':
+					this.io.emit(inputCommands.restart)
+					break
+				default:
+					break
+			}
+		})
 	}
 }
