@@ -34,7 +34,7 @@ export class HtmlOutput extends GameOutput {
 			}
 		})
 		this.io.on(outputCommands.scoreChange, (score, added) => {
-			this.game.io.mainElement.querySelector('.score').textContent = `スコア: ${score}${added ? `(+${added})` : ''}`
+			this.game.io.mainElement.querySelector('.score').innerText = `スコア:\n${score}${added ? `(+${added})` : ''}`
 		})
 	}
 	init() {
@@ -50,8 +50,13 @@ export class HtmlOutput extends GameOutput {
 				this.fieldElement.append(tile)
 			})
 		})
-		this.game.io.mainElement.querySelector('.bestScore').textContent = `最大: ${HtmlOutput.toDisplayNumber(this.game.record.bestScore)}`
-		this.game.io.mainElement.querySelector('.averageScore').textContent = `平均: ${Math.floor(HtmlOutput.toDisplayNumber(this.game.record.averageScore) * 10) / 10}`
+		this.game.io.mainElement.querySelector('.bestTileValue').innerText = `最大: ${HtmlOutput.toDisplayNumber(this.game.record.bestTileValue)}`
+		this.game.io.mainElement.querySelector('.averageTileValue').innerText = `平均: ${Math.floor(HtmlOutput.toDisplayNumber(this.game.record.averageTileValue) * 10) / 10}`
+		this.game.io.mainElement.querySelector('.tileValueData').innerText = Object
+			.entries(this.game.record.tileValueData)
+			.reverse()
+			.map(([value, length]) => `${HtmlOutput.toDisplayNumber(value)}: ${length}`)
+			.join('\n')
 	}
 	async #addTile(x, y, state) {
 		const newElement = document.createElement('div')
