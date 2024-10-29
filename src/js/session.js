@@ -116,4 +116,15 @@ export class Session extends EventRegister {
 		this.game.io.emit(outputCommands.scoreChange, this.score)
 		this.game.io.emit(outputCommands.stepChange, this.step, this.recorder.data.length - 1)
 	}
+	getExportedData() {
+		return structuredClone({
+			config: this.config,
+			field: this.field.data,
+			random: this.random.getValues(),
+			recorder: this.recorder.data,
+			step: this.step,
+			score: this.score,
+			gameOvered: this.isGameOvered
+		})
+	}
 }
