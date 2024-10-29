@@ -6,7 +6,7 @@ export class KeyboardInput extends GameInput {
 	constructor(io, game) {
 		super(io, game)
 		this.keyDownHandler = () => { }
-		this.touchStartHandler = () => { }
+		this.pointerDownHandler = () => { }
 		this.touchMoveHandler = () => { }
 		this.touchEndHandler = () => { }
 		this.init()
@@ -31,21 +31,17 @@ export class KeyboardInput extends GameInput {
 					break
 			}
 		}
-		this.touchStartHandler = e => {
-			if (e.target.classList.contains('touchable')) {
-				return
-			}
-			e.preventDefault()
-			let startX = e.touches[0].pageX
-			let startY = e.touches[0].pageY
+		this.pointerDownHandler = e => {
+			let startX = e.screenX
+			let startY = e.screenY
 			let endX = 0
 			let endY = 0
-			const touchMoveHandler = e => {
-				endX = e.changedTouches[0].pageX
-				endY = e.changedTouches[0].pageY
+			const pointerMoveHandler = e => {
+				endX = e.screenX
+				endY = e.screenY
 			}
-			document.addEventListener('touchmove', touchMoveHandler, { passive: true })
-			document.addEventListener('touchend', () => {
+			document.addEventListener('pointermove', pointerMoveHandler, { passive: true })
+			document.addEventListener('pointerup', () => {
 				const distanceX = endX - startX
 				const distanceY = endY - startY
 				const absDistanceX = Math.abs(distanceX)
@@ -69,14 +65,21 @@ export class KeyboardInput extends GameInput {
 					this.io.emit(directions.left)
 					return
 				}
-				document.removeEventListener('touchmove', touchMoveHandler, { passive: true })
+				document.removeEventListener('pointermove', pointerMoveHandler, { passive: true })
 			}, {
 				passive: true,
 				once: true
 			})
 		}
 		document.addEventListener('keydown', this.keyDownHandler)
-		document.addEventListener('touchstart', this.touchStartHandler, { passive: false })
+		document.addEventListener('pointerdown', this.pointerDownHandler)
+
+		document.addEventListener('touchstart', e => {
+			if (e.target.classList.contains('touchable')) {
+				return
+			}
+			e.preventDefault()
+		}, { passive: false })
 
 		this.io.on(gameEvents.sessionInit, () => {
 			this.game.session.once(gameEvents.gameOver, (max) => {
