@@ -32,6 +32,9 @@ export class KeyboardInput extends GameInput {
 			}
 		}
 		this.pointerDownHandler = e => {
+			if (e.target.classList.contains('touchable')) {
+				return
+			}
 			let startX = e.screenX
 			let startY = e.screenY
 			let endX = e.screenX
