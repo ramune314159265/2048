@@ -34,8 +34,8 @@ export class KeyboardInput extends GameInput {
 		this.pointerDownHandler = e => {
 			let startX = e.screenX
 			let startY = e.screenY
-			let endX = 0
-			let endY = 0
+			let endX = e.screenX
+			let endY = e.screenY
 			const pointerMoveHandler = e => {
 				endX = e.screenX
 				endY = e.screenY
