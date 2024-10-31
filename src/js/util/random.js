@@ -12,6 +12,7 @@ export class Random {
 		this.y = 362436069
 		this.z = 521288629
 		this.w = seed
+		this.initial = [this.x, this.y, this.z, this.w]
 	}
 	generate(min, max) {
 		let t = this.x ^ (this.x << 11)

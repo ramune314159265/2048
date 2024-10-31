@@ -119,12 +119,12 @@ export class Session extends EventRegister {
 	getExportedData() {
 		return structuredClone({
 			config: this.config,
-			field: this.field.data,
-			random: this.random.getValues(),
-			recorder: this.recorder.data,
-			step: this.step,
+			initialRandom: this.random.initial,
+			operation: this.recorder.data
+				.filter(i => i.direction)
+				.map(i => i.direction),
 			score: this.score,
-			gameOvered: this.isGameOvered
+			field: this.field.data,
 		})
 	}
 }
