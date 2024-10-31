@@ -34,6 +34,16 @@ export class Game extends EventRegister {
 		})
 		this.session.init()
 	}
+	loadExportedData(json) {
+		const data = JSON.parse(json)
+		this.newSession({
+			configOverrides: data.config,
+			randomSeed: data.randomSeed
+		})
+		data.operation.forEach(i => {
+			this.io.emit(directions[i])
+		})
+	}
 	async screenshot() {
 		const newWindow = window.open("about:blank", Math.random())
 		const elementsToImage = [

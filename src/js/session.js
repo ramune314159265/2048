@@ -119,7 +119,7 @@ export class Session extends EventRegister {
 	getExportedData() {
 		return structuredClone({
 			config: this.config,
-			initialRandom: this.random.initial,
+			randomSeed: this.random.initial,
 			operation: this.recorder.data
 				.filter(i => i.direction)
 				.map(i => i.direction),
