@@ -26,7 +26,6 @@ export class Session extends EventRegister {
 		this.game.io.on(inputCommands.setStep, step => this.rewind(step))
 	}
 	init() {
-
 		this.game.io.emit(gameEvents.sessionInit)
 		const randomGenValues = this.random.getValues()
 		this.field.appearTile(this.config.initAppearTileLength)
