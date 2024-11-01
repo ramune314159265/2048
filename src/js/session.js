@@ -26,6 +26,7 @@ export class Session extends EventRegister {
 		this.game.io.on(inputCommands.setStep, step => this.rewind(step))
 	}
 	init() {
+
 		this.game.io.emit(gameEvents.sessionInit)
 		const randomGenValues = this.random.getValues()
 		this.field.appearTile(this.config.initAppearTileLength)
@@ -119,7 +120,7 @@ export class Session extends EventRegister {
 	getExportedData() {
 		return structuredClone({
 			config: this.config,
-			randomSeed: this.random.initial,
+			randomSeed: this.random.initial[3],
 			operation: this.recorder.data
 				.filter(i => i.direction)
 				.map(i => i.direction),

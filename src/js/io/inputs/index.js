@@ -9,7 +9,6 @@ export class GameInput {
 		io.mainElement.querySelector('.reset').addEventListener('click', () => io.emit(inputCommands.restart))
 		io.mainElement.querySelector('.screenshot').addEventListener('click', () => io.game.screenshot())
 		io.mainElement.querySelector('.importExport').addEventListener('click', () => {
-			console.log(lzstring)
 			const saveData = lzstring.compressToEncodedURIComponent(JSON.stringify(io.game.session.getExportedData()))
 			const inputtedData = prompt('セーブデータを出力しました\nセーブデータを入力して読み込み', saveData)
 			if (inputtedData === saveData || !inputtedData) {
