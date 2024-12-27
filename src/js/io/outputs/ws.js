@@ -9,7 +9,8 @@ export class WebSocketOutput extends HtmlOutput {
 				this.io.ws.send(JSON.stringify({
 					type: 'datasend',
 					field: this.game.session.field.data,
-					score: this.game.session.score
+					score: this.game.session.score,
+					gameOvered: this.game.session.isGameOvered
 				}))
 			}, 0)
 		})

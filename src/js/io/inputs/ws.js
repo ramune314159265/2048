@@ -1,4 +1,4 @@
-import { directions, inputCommands } from '../../enum.js'
+import { inputCommands } from '../../enum.js'
 import { GameInput } from './index.js'
 
 export class WebSocketInput extends GameInput {
@@ -6,14 +6,15 @@ export class WebSocketInput extends GameInput {
 		super(io, game)
 		this.io.ws.addEventListener('message', message => {
 			const data = JSON.parse(message.data)
+			console.log(data)
 			switch (data.type) {
-				case 'move':
-					this.io.emit(directions[data.direction])
+				case 'input': {
+					if (!Object.keys(inputCommands).includes(data.command)) {
+						return
+					}
+					this.io.emit(inputCommands[data.command])
 					break
-
-				case 'restart':
-					this.io.emit(inputCommands.restart)
-					break
+				}
 				default:
 					break
 			}
