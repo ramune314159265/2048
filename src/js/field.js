@@ -135,7 +135,7 @@ export class Field {
 		const willFilledTileLength = Math.min(blankTiles.length, length || this.session.config.appearTileLength)
 		const targetTiles = [...Array(willFilledTileLength)].map(() => {
 			const randomStartIndex = this.session.random.generate(0, blankTiles.length - 1)
-			return [...blankTiles].splice(randomStartIndex, 1).at()
+			return blankTiles.splice(randomStartIndex, 1)[0]
 		})
 		targetTiles.forEach(tile => {
 			this.#addTile(tile[0], tile[1], this.session.config.availableTiles[this.session.random.generate(0, this.session.config.availableTiles.length - 1)])
