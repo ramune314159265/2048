@@ -18,7 +18,7 @@ export class Record {
 		const result = {}
 		this.records.forEach(i => {
 			if (!result[i]) {
-				result[i] = 1
+				result[i] = 0
 			}
 			result[i]++
 		})
