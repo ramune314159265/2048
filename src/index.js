@@ -1,12 +1,10 @@
 import { Game } from './js/index.js'
-import { TfTrainIO } from './js/io/tf.js'
+import { ManualIO } from './js/io/manual.js'
 
 const run = () => {
 	const gameMain = new Game({
-		IOClass: TfTrainIO,
-		configOverrides: {
-			animationDuration: 0
-		}
+		IOClass: ManualIO,
+		configOverrides: {}
 	})
 
 	document.body.addEventListener('click', () => {
