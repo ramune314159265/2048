@@ -8,6 +8,7 @@ class Game2048:
 	width = 4
 	height = 4
 	def __init__(self):
+		self.score = 0
 		self.reset()
 		self.appearTile(2)
 
@@ -68,16 +69,21 @@ class Game2048:
 					if selfTileState == self.getTileState(x, positionY) and not [x, positionY] in merged:
 						self.mergeTile(x, y, x, positionY)
 						merged.append([x, positionY])
-						changed.append([x, y, x, positionY, 'merged'])
+						changed.append([x, y, x, positionY, 'merged', self.getTileState(x, positionY)])
 					else:
 						self.moveTile(x, y, x, positionY + 1)
-						changed.append([x, y, x, positionY + 1, 'moved'])
+						changed.append([x, y, x, positionY + 1, 'moved', 0])
 					break
 
 		self.board = np.rot90(self.board, -direction)
+		reward = 0
+		for m in changed:
+			reward = reward + m[5]
 
 		if(len(list(filter(lambda x: x[0] != x[2] or x[1] != x[3], changed))) != 0):
 			self.appearTile(1)
+
+		return reward
 
 	def appearTile(self, length):
 		for _ in range(length):
@@ -98,12 +104,10 @@ class Game2048:
 					return False
 		return True
 
-game = Game2048()
-game.setTileState(0,0,1)
-game.moveTile(0,0,0,3)
-game.setTileState(0,0,1)
-game.mergeTile(0,0,0,3)
-while True:
-	print(game.board)
-	i =  int(input('direction num:'))
-	game.move(i)
+if __name__ == '__main__':
+	game = Game2048()
+	while True:
+		print(game.board)
+		i = int(input('direction num:'))
+		reward = game.move(i)
+		print('reword:' + str(reward))
