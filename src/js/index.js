@@ -34,8 +34,7 @@ export class Game extends EventRegister {
 		})
 		this.session.init()
 	}
-	loadExportedData(json) {
-		const data = JSON.parse(json)
+	loadExportedData(data) {
 		this.newSession({
 			configOverrides: data.config,
 			randomSeed: data.randomSeed
