@@ -20,7 +20,7 @@ class DQN:
 		self.epsilon_decay = 0.995
 		self.epsilon_min = 0.01
 		self.gamma = 0.99
-		self.learning_rate = 0.01
+		self.learning_rate = 0.03
 		self.memory = deque(maxlen=2000)
 		self.model = self.build_model()
 
@@ -74,7 +74,7 @@ for episode in tqdm(range(episodes)):
 		merged_values = game.move(action)
 		reward = 0
 		for i in merged_values:
-			reward = reward + 2 ** i
+			reward = reward + 1.5 ** i
 		is_game_overed = game.isGameOver()
 		new_state = np.ndarray.flatten(game.board).reshape(1, -1)
 		agent.remember(state, action, reward, new_state, is_game_overed)
@@ -84,8 +84,8 @@ for episode in tqdm(range(episodes)):
 			print(f"Episode :{episode}/{episodes}, max :{2 ** np.max(state)}, score: {game.score}, epsilon: {agent.epsilon}")
 			print(game.board)
 			break
-	agent.replay(32)
-	if episode % 5 == 0:
+	agent.replay(64)
+	if episode % 10 == 0:
 		agent.model.save(f'./save/{start_time}/{episode}.keras')
 
 agent.model.save(f'./save/{start_time}/finish.keras')
