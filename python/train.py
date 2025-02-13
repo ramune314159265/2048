@@ -20,7 +20,7 @@ class DQN:
 		self.epsilon_decay = 0.995
 		self.epsilon_min = 0.01
 		self.gamma = 0.99
-		self.learning_rate = 0.03
+		self.learning_rate = 0.005
 		self.memory = deque(maxlen=2000)
 		self.model = self.build_model()
 
