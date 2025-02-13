@@ -8,12 +8,12 @@ class Game2048:
 	width = 4
 	height = 4
 	def __init__(self):
-		self.score = 0
 		self.reset()
-		self.appearTile(2)
 
 	def reset(self):
+		self.score = 0
 		self.board = np.zeros((Game2048.width, Game2048.height), dtype=int)
+		self.appearTile(2)
 
 	def isTileFilled(self, x, y):
 		return self.getTileState(x, y) != Game2048.emptyState
@@ -79,6 +79,8 @@ class Game2048:
 		reward = 0
 		for m in changed:
 			reward = reward + m[5]
+			if m[4] == "merged":
+				self.score = self.score + 2 ** m[5]
 
 		if(len(list(filter(lambda x: x[0] != x[2] or x[1] != x[3], changed))) != 0):
 			self.appearTile(1)
@@ -94,6 +96,8 @@ class Game2048:
 	def isGameOver(self):
 		for x in range(Game2048.width):
 			for y in range(Game2048.height):
+				if not self.isTileFilled(x, y):
+					return False
 				if self.getTileState(x, y) == self.getTileState(x, y + 1):
 					return False
 				if self.getTileState(x, y) == self.getTileState(x + 1, y):
