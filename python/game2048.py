@@ -76,16 +76,16 @@ class Game2048:
 					break
 
 		self.board = np.rot90(self.board, -direction)
-		reward = 0
+		merged_values = []
 		for m in changed:
-			reward = reward + m[5]
 			if m[4] == "merged":
+				merged_values.append(m[5])
 				self.score = self.score + 2 ** m[5]
 
 		if(len(list(filter(lambda x: x[0] != x[2] or x[1] != x[3], changed))) != 0):
 			self.appearTile(1)
 
-		return reward
+		return merged_values
 
 	def appearTile(self, length):
 		for _ in range(length):
@@ -113,5 +113,5 @@ if __name__ == '__main__':
 	while True:
 		print(game.board)
 		i = int(input('direction num:'))
-		reward = game.move(i)
-		print('reword:' + str(reward))
+		merged_values = game.move(i)
+		print('reword:' + str(merged_values))
