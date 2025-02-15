@@ -15,11 +15,11 @@ export class Field {
 		}
 		return this.data[y][x]
 	}
-	#setTileState(x, y, id) {
+	#setTileState(x, y, state) {
 		if (x < 0 || this.session.config.fieldWidth <= x || y < 0 || this.session.config.fieldHeight <= y) {
 			return
 		}
-		this.data[y][x] = id
+		this.data[y][x] = state
 	}
 	#addTile(x, y, state) {
 		if (this.isTileFilled(x, y)) {
