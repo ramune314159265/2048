@@ -2,3 +2,5 @@ node_modules/
 build/
 __pycache__/
 *.keras
+*.bin
+*model*.json
