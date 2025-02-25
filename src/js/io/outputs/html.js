@@ -23,14 +23,16 @@ export class HtmlOutput extends GameOutput {
 			this.game.io.mainElement.querySelector('.stepBar').max = all
 			this.game.io.mainElement.querySelector('.stepBar').value = step
 			if (all <= step) {
-				this.game.io.mainElement.querySelector('.next').setAttribute("disabled", true)
+				this.game.io.mainElement.querySelector('.next').disabled = true
+				this.game.io.mainElement.querySelector('.play').disabled = true
 			} else {
-				this.game.io.mainElement.querySelector('.next').removeAttribute("disabled")
+				this.game.io.mainElement.querySelector('.next').disabled = false
+				this.game.io.mainElement.querySelector('.play').disabled = false
 			}
 			if (step <= 0) {
-				this.game.io.mainElement.querySelector('.previous').setAttribute("disabled", true)
+				this.game.io.mainElement.querySelector('.previous').disabled = true
 			} else {
-				this.game.io.mainElement.querySelector('.previous').removeAttribute("disabled")
+				this.game.io.mainElement.querySelector('.previous').disabled = false
 			}
 		})
 		this.io.on(outputCommands.scoreChange, (score, added) => {

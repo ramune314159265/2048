@@ -52,6 +52,10 @@ button {
 	border-radius: var(--border-radius);
 }
 
+button:disabled {
+	cursor: no-drop;
+}
+
 button:not(:disabled) {
 	cursor: pointer;
 }
@@ -95,7 +99,7 @@ button:not(:disabled) {
 	grid-column: 1 / 3;
 	display: grid;
 	gap: var(--padding);
-	grid-template-columns: 48px 1fr 48px;
+	grid-template-columns: 48px 1fr 48px 48px;
 }
 
 .stepBar {
