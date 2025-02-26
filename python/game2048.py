@@ -1,115 +1,44 @@
+import json
 import random
+import subprocess
 
 import numpy as np
 
+available_tiles = [1, 1, 1, 1, 1, 1, 1, 1, 1, 2]
 
 class Game2048:
-	emptyState = 0
 	width = 4
 	height = 4
-	def __init__(self):
+	def __init__(self, seed=88675123):
+		self.board = np.zeros((Game2048.width, Game2048.height), dtype=int)
+		self.isGameOvered = False
+		self.score = 0
+		self.seed = seed
 		self.reset()
 
 	def reset(self):
-		self.score = 0
-		self.board = np.zeros((Game2048.width, Game2048.height), dtype=int)
-		self.appearTile(2)
-
-	def isTileFilled(self, x, y):
-		return self.getTileState(x, y) != Game2048.emptyState
-
-	def getTileState(self, x, y):
-		if (x < 0) or (Game2048.width <= x) or (y < 0) or (Game2048.height <= y):
-			return -1
-		return self.board[y, x]
-
-	def setTileState(self, x, y, state):
-		if (x < 0) or (Game2048.width <= x) or (y < 0) or (Game2048.height <= y):
-			return
-		self.board[y, x] = state
-
-	def moveTile(self, x, y, toX, toY):
-		if not self.isTileFilled(x, y) and self.isTileFilled(toX, toY):
-			return
-
-		originTileState = self.getTileState(x, y)
-		self.setTileState(x, y, Game2048.emptyState)
-		self.setTileState(toX, toY, originTileState)
-
-	def mergeTile(self, x, y, targetX, targetY):
-		if not self.isTileFilled(x, y) and not self.isTileFilled(targetX, targetY):
-			return
-		if self.getTileState(x, y) != self.getTileState(targetX, targetY):
-			return
-
-		self.setTileState(targetX, targetY, self.getTileState(targetX, targetY) + 1)
-		self.setTileState(x, y, Game2048.emptyState)
+		if hasattr(self, 'process'):
+			self.process.kill()
+		self.process = subprocess.Popen(
+			['node', './game2048.mjs', str(self.seed)],
+			encoding='UTF-8',
+			stdin=subprocess.PIPE,
+			stdout=subprocess.PIPE
+		)
+		jsonData = json.loads(self.process.stdout.readline().strip())
+		self.board = np.array(jsonData['field'])
 
 	def move(self, direction):
-		self.board = np.rot90(self.board, direction)
-
-		merged = []
-		changed = []
-
-		for x in range(Game2048.width):
-			for y in range(Game2048.height):
-				if not self.isTileFilled(x, y):
-					continue
-
-				selfTileState = self.getTileState(x, y)
-				i = 0
-				while True:
-					i = i + 1
-					positionY = y - i
-					if not self.isTileFilled(x, positionY):
-						continue
-					if y == positionY:
-						continue
-
-					if selfTileState == self.getTileState(x, positionY) and not [x, positionY] in merged:
-						self.mergeTile(x, y, x, positionY)
-						merged.append([x, positionY])
-						changed.append([x, y, x, positionY, 'merged', self.getTileState(x, positionY)])
-					else:
-						self.moveTile(x, y, x, positionY + 1)
-						changed.append([x, y, x, positionY + 1, 'moved', 0])
-					break
-
-		self.board = np.rot90(self.board, -direction)
-		merged_values = []
-		for m in changed:
-			if m[4] == "merged":
-				merged_values.append(m[5])
-				self.score = self.score + 2 ** m[5]
-
-		if(len(list(filter(lambda x: x[0] != x[2] or x[1] != x[3], changed))) != 0):
-			self.appearTile(1)
-
-		return merged_values
-
-	def appearTile(self, length):
-		for _ in range(length):
-			empty_tiles = [(x, y) for x in range(Game2048.width) for y in range(Game2048.height) if not self.isTileFilled(x, y)]
-			x, y = random.choice(empty_tiles)
-			self.setTileState(x, y, 1 if random.random() < 0.9 else 2)
-
-	def isGameOver(self):
-		for x in range(Game2048.width):
-			for y in range(Game2048.height):
-				if not self.isTileFilled(x, y):
-					return False
-				if self.getTileState(x, y) == self.getTileState(x, y + 1):
-					return False
-				if self.getTileState(x, y) == self.getTileState(x + 1, y):
-					return False
-				if self.getTileState(x, y) == self.getTileState(x, y - 1):
-					return False
-				if self.getTileState(x, y) == self.getTileState(x - 1, y):
-					return False
-		return True
+		print(str(direction), file=self.process.stdin, flush=True)
+		jsonData = json.loads(self.process.stdout.readline().strip())
+		self.board = np.array(jsonData['field'])
+		self.isGameOvered = jsonData['isGameOver']
+		self.score = jsonData['score']
+		return jsonData['mergedValues']
 
 if __name__ == '__main__':
 	game = Game2048()
+	game.reset(12)
 	while True:
 		print(game.board)
 		i = int(input('direction num:'))

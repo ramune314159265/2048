@@ -20,13 +20,13 @@ class DQN:
 		self.epsilon_decay = 0.995
 		self.epsilon_min = 0.01
 		self.gamma = 0.99
-		self.learning_rate = 0.005
+		self.learning_rate = 0.001
 		self.memory = deque(maxlen=2000)
 		self.model = self.build_model()
 
 	def build_model(self):
 		model = Sequential([
-			Dense(512, input_shape=(self.state_size,), activation='relu'),
+			Dense(256, input_shape=(self.state_size,), activation='relu'),
 			Dense(256, activation='relu'),
 			Dense(self.action_size, activation='linear')
 		])
@@ -75,7 +75,7 @@ for episode in tqdm(range(episodes)):
 		reward = 0
 		for i in merged_values:
 			reward = reward + 1.5 ** i
-		is_game_overed = game.isGameOver()
+		is_game_overed = game.isGameOvered
 		new_state = np.ndarray.flatten(game.board).reshape(1, -1)
 		agent.remember(state, action, reward, new_state, is_game_overed)
 		state = new_state

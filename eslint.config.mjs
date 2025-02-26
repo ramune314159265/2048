@@ -5,7 +5,7 @@ export default [
 	pluginJs.configs.recommended,
 	{
 		languageOptions: {
-			globals: globals.browser
+			globals: [globals.browser, globals.node]
 		},
 		ignores: ["src/js/libraries/*"],
 		rules: {
